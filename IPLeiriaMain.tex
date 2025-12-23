@@ -1,9 +1,3 @@
-% Author Name: José Areia 
-% Author Contact: jose.apareia@gmail.com
-% Version: 2.2.12 - 2025-12-15
-% Public Repository: https://github.com/joseareia/ipleiria-thesis
-% Wiki/Getting Help: https://github.com/joseareia/ipleiria-thesis/wiki
-
 %%% Document Options %%%
 \documentclass[
     language=spanish,
@@ -16,7 +10,7 @@
     coverstyle=classic,
     aiacknowledgement=false,
     listprefix=false
-]{IPLeiriaThesis} % Refer to the Wiki for a list of available options.
+]{IPLeiriaThesis}
 
 %%% Document Version %%%
 \DocumentVersion{1.0.0} % Required only if the 'docstage' is set to 'working'.
@@ -43,6 +37,16 @@
 %%% Bibliography %%%
 \renewcommand{\refname}{Bibliografía}
 \printbibliography[title={\refname},heading=bibintoc]
+
+%%% Appendices: Work that *YOU* Developed %%%
+% \appendix
+% \input{Matter/08-Appendices}
+% \input{Chapters/Appendices/00-AppendixA}
+% \input{Chapters/Appendices/01-AppendixB}
+
+%%% Annexes: Work that *YOU DID NOT* Develop %%%
+% \input{Matter/09-Annexes}
+% \input{Chapters/Annexes/00-AnnexA}
 
 %%% Back Page %%%
 \input{Matter/10-Back-Page}
