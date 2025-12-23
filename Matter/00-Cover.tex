@@ -125,19 +125,29 @@
         }
     }
 
-    \vspace{35pt}  
+    \vspace{45pt}  
 
     % Author.
-    {\noindent\bfseries\fontsize{14}{19}\selectfont\GetFirstAuthor}
+    {\noindent\fontsize{14}{19}\selectfont\GetFirstAuthor}
 
     \ifdefined\GetSecondAuthor
         \vspace{8pt}
-        {\noindent\bfseries\fontsize{14}{19}\selectfont\GetSecondAuthor}
+        {\noindent\fontsize{14}{19}\selectfont\GetSecondAuthor}
 	\fi
 
     \ifdefined\GetThirdAuthor
         \vspace{8pt}
-        {\noindent\bfseries\fontsize{14}{19}\selectfont\GetThirdAuthor}
+        {\noindent\fontsize{14}{19}\selectfont\GetThirdAuthor}
+	\fi
+
+    \ifdefined\GetFourthAuthor
+        \vspace{8pt}
+        {\noindent\fontsize{14}{19}\selectfont\GetFourthAuthor}
+	\fi
+
+    \ifdefined\GetFifthAuthor
+        \vspace{8pt}
+        {\noindent\fontsize{14}{19}\selectfont\GetFifthAuthor}
 	\fi
  
 	\vfill

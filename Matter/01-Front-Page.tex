@@ -76,22 +76,49 @@
 
     \vspace{35pt}
 
-    % Author.
-    {\noindent\bfseries\fontsize{14}{19}\selectfont\GetFirstAuthor}
-    
-    {\noindent\itshape\fontsize{10}{10}\selectfont Student No. \GetFirstAuthorNumber}
+    % Authors in two columns.
+    \noindent
+    \begin{minipage}[t]{0.48\textwidth}
+        % Left column
+        {\fontsize{14}{19}\selectfont\GetFirstAuthor}\\
+        {\itshape\fontsize{10}{12}\selectfont\GetFirstAuthorNumber}
+        
+        \ifdefined\GetSecondAuthor
+            \par\vspace{10pt}
+            {\fontsize{14}{19}\selectfont\GetSecondAuthor}\\
+            \ifdefined\GetSecondAuthorNumber
+                {\itshape\fontsize{10}{12}\selectfont\GetSecondAuthorNumber}
+            \fi
+        \fi
+        
+        \ifdefined\GetThirdAuthor
+            \par\vspace{10pt}
+            {\fontsize{14}{19}\selectfont\GetThirdAuthor}\\
+            \ifdefined\GetThirdAuthorNumber
+                {\itshape\fontsize{10}{12}\selectfont\GetThirdAuthorNumber}
+            \fi
+        \fi
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[t]{0.48\textwidth}
+        % Right column
+        \ifdefined\GetFourthAuthor
+            {\fontsize{14}{19}\selectfont\GetFourthAuthor}\\
+            \ifdefined\GetFourthAuthorNumber
+                {\itshape\fontsize{10}{12}\selectfont\GetFourthAuthorNumber}
+            \fi
+        \fi
+        
+        \ifdefined\GetFifthAuthor
+            \par\vspace{10pt}
+            {\fontsize{14}{19}\selectfont\GetFifthAuthor}\\
+            \ifdefined\GetFifthAuthorNumber
+                {\itshape\fontsize{10}{12}\selectfont\GetFifthAuthorNumber}
+            \fi
+        \fi
+    \end{minipage}
 
-    \ifdefined\GetSecondAuthor
-        \vspace{8pt}
-        {\noindent\bfseries\fontsize{14}{19}\selectfont\GetSecondAuthor}
-	\fi
-
-    \ifdefined\GetThirdAuthor
-        \vspace{8pt}
-        {\noindent\bfseries\fontsize{14}{19}\selectfont\GetThirdAuthor}
-	\fi
-
-    \vfill    
+     \vspace{40pt}   
 
     {
     \noindent
@@ -114,7 +141,7 @@
     \end{tabular}
     }
     
-    \vfill
+    \vspace{40pt}
 	
     % School.
 	{\noindent\fontsize{10}{12}\selectfont\GetSchool}
@@ -130,12 +157,12 @@
         {\noindent\fontsize{10}{12}\selectfont\GetCourse}
 	\fi
 
-    \vspace{45pt}
+    \vspace{15pt}
 
     % Thesis option.
 	{\noindent\fontsize{10}{12}\itshape\selectfont\GetThesisType}
 
-    \vspace{45pt}
+    \vspace{15pt}
 
     % Local and date.
 	{\noindent\fontsize{10}{12}\selectfont\GetDate}
