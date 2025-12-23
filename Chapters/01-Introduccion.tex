@@ -1,8 +1,68 @@
 \chapter{Introducción}
 \label{chap:introduccion}
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Este trabajo final de cursada tiene como objetivo afianzar los conocimientos teóricos y prácticos obtenidos durante la cursada, aplicándolos al diseño y simulación de un radar de onda continua de frecuencia modulada (FMCW).
 
-Curabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida. Duis ac tellus et risus vulputate vehicula. Donec lobortis risus a elit. Etiam tempor. Ut ullamcorper, ligula eu tempor congue, eros est euismod turpis, id tincidunt sapien risus a quam. Maecenas fermentum consequat mi.
+La representación del circuito impreso del radar puede observarse en la Figura \ref{fig:radar_pcb}. Como se observa, el mismo consiste de seis bloques: 1) Oscilador Controlado por Tensión (VCO), 2) Acoplador, 3) Amplificador de Potencia (PA), 4) Amplificador de Bajo Ruido, 5) Mezclador y Amplificador de Frecuencia Intermedia (FI). Más detalles del principio de funcionamiento del RADAR y sus archivos de diseño pueden encontrarse en el repositorio de la materia (\url{https://github.com/aalmela/EAIII_Radar}).
 
-Donec fermentum. Pellentesque malesuada nulla a mi. Duis sapien sem, aliquet sed, vulputate eget, feugiat non, erat. Etiam commodo dui eget wisi. Nulla facilisi. Sed neque. Sed luctus ligula sed dolor mattis sodales. Aliquam et nulla. Nulla facilisi. Etiam rhoncus nulla a mi. Suspendisse ultricies augue.
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.95\textwidth]{Figures/pcb_consigna.jpg}
+    \caption{Circuito impreso correspondiente al RADAR implementado durante la cursada de EAIII.}
+    \label{fig:radar_pcb}
+\end{figure}
+
+\section{Consignas}
+
+Se solicita al alumno, o grupo de alumnos (máximo 5 personas), la presentación de un reporte de simulaciones utilizando las herramientas utilizadas durante la cursada. Se deben implementar los circuitos correspondientes al VCO, LNA, PA y Mezclador. A modo de ejemplo se provee a los estudiantes de los espacios de trabajos (workspaces) con los diseños básicos para guiarse durante las simulación. Al mismo tiempo pueden guiarse de las notas de aplicación disponibles en el repositorio (\url{https://github.com/aalmela/EAIII_Radar}).
+
+Para considerarse aprobado, el informe debe incluir obligatoriamente los ítems listados a continuación, diferenciados para cada uno de los bloques.
+
+\subsection{Amplificador de Bajo Ruido (LNA)}
+\begin{itemize}
+    \item Punto de polarización.
+    \item Análisis de estabilidad.
+    \item Ganancia.
+    \item Cifra de ruido.
+    \item Punto de compresión de 1dB ($P_{1dB}$) y productos de intermodulación de Tercer Orden ($IMD_3$).
+\end{itemize}
+
+\subsection{Amplificador de Potencia (PA)}
+\begin{itemize}
+    \item Encontrar punto de polarización para clase AB.
+    \item Determinar ganancia.
+    \item Formas de onda de corriente y tensión en colector, fuente y carga.
+    \item Potencia de salida.
+    \item Espectro de salida.
+\end{itemize}
+
+\subsection{Oscilador Controlado por Tensión (VCO)}
+\begin{itemize}
+    \item Análisis de Estabilidad.
+    \item Cálculo de impedancia medida en la entrada del núcleo (Core sin).
+    \item Inclusión de diodo VARICAP (resonador) y modelo real asociado.
+    \item Determinación de frecuencia de oscilación y condición de arranque.
+    \item Forma de onda de tensión de salida.
+    \item Potencia de salida y nivel de armónicos.
+    \item Frecuencia de oscilación en función de tensión de control $f_0(V_{tune})$.
+\end{itemize}
+
+\subsection{Mezclador Simple Balanceado (Mixer)}
+\begin{itemize}
+    \item Determinar el valor de componentes del acoplador Rat-Race usando elementos discretos.
+    \item Determinar matriz de parámetros S del acoplador.
+    \item Ganancia de conversión del mezclador.
+    \item Ganancia de Conversión en función de la potencia de oscilador local.
+\end{itemize}
+
+Cabe destacar que todos los circuitos deben simularse a la frecuencia de operación de 1GHz. En caso de encontrar que su punto de operación está desplazado con respecto a 1GHz, se debe realizar la optimización del circuito para satisfacer esta condición.
+
+\section{Entrega de Informes y Evaluación Oral}
+
+El trabajo final de materia consiste de dos condiciones necesarias: la primera es la entrega del informe de simulación, la segunda es una evaluación oral breve.
+
+Los resultados de simulación deben ser presentados de forma escrita en un formato LaTeX con tamaño de hoja A4, como el utilizado en esta guía. Pueden solicitar el template del documento a los docentes de la cátedra. Se solicita la utilización de lenguaje técnico, la correcta inclusión de figuras de buena calidad con sus respectivas leyendas y referencias en el texto. La portada debe indicar el nombre del alumno, curso, grupo y versión. \textbf{La fecha límite para la primera entrega de informe es la última semana de Enero 2026, mientras que para la entrega de informes corregidos es la segunda semana de Febrero 2026.}
+
+Para la aprobación del informe, se deben describir de forma breve la topología utilizada por cada bloque del RADAR, la metodología de diseño utilizada y el método/modo de simulación empleado para efectuar cada uno de los ítems anteriormente mencionados.
+
+La evaluación oral será realizada luego de la entrega de informes y consistirá en preguntas sobre la implementación de los circuitos y de los resultados de la simulación. La duración de la evaluación no superará los 15 minutos y se realizará de forma virtual con fecha a coordinar antes del fin de Febrero 2026.
