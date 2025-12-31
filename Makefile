@@ -4,7 +4,7 @@
 # Reference Link: https://scaron.info/blog/makefiles-for-latex.html
 # Dependencies: ["rubber", "latexmk", "inotify-tools"]
 
-DOCUMENT=IPLeiriaMain.tex
+DOCUMENT=EA3_Informe_Radar.tex
 SHELL=/bin/bash
 TOOL=latexmk
 
