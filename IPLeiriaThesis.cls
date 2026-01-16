@@ -20,7 +20,7 @@
 
 \keys_define:nn { IPLeiriaThesis } {
     school .choices:nn =
-        { estg, esecs, esslei, esad, estm }
+        { estg, esecs, esslei, esad, estm, utnfrba }
         { \tl_gset:Nn \g_IPLeiriaThesis_myschool_tl { #1 } },
     school / unknown .code:n = 
         { \ClassWarningNoLine{IPLeiriaThesis}
@@ -37,7 +37,7 @@
     coverstyle .initial:n = { classic },
 
     language .choices:nn = 
-        { english, portuguese } 
+        { english, portuguese, spanish } 
         { \tl_gset:Nn \g_IPLeiriaThesis_mylanguage_tl { #1 } },
     language / unknown .code:n = 
         { \ClassWarningNoLine{IPLeiriaThesis}{Specified~'language'~not~available.~Defaulting~to~'english'} },
@@ -170,8 +170,13 @@
 \RequirePackage{soul} % A better underline.
 \RequirePackage{mfirstuc} % Capitalise words in a sentence.
 \RequirePackage{tikz} % Create high-quality graphics programmatically.
+\RequirePackage{pgfplots} % Create publication-quality plots.
+\RequirePackage{pgfplotstable} % Load data from external files.
+\pgfplotsset{compat=1.18} % Use modern pgfplots features.
+\RequirePackage{circuitikz} % Circuit diagrams with TikZ.
 \RequirePackage{psvectorian} % To include in-text ornamatentions. 
 \RequirePackage{blindtext} % Generate placeholder text.
+\usepackage{bm}
 
 \tcbuselibrary{most} % Load most libraries from the tcolorbox package.
 \WarningsOff[blindtext] % Suppress warnings from the blindtext package.

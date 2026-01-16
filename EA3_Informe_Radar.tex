@@ -1,0 +1,59 @@
+%%% Document Options %%%
+\documentclass[
+    language=spanish,
+    school=utnfrba,
+    docstage=final,
+    media=screen,
+    bookprint=false,
+    linkcolor=red!45!black,
+    chapterstyle=classic,
+    coverstyle=classic,
+    aiacknowledgement=false,
+    listprefix=false
+]{IPLeiriaThesis}
+
+%%% Document Version %%%
+\DocumentVersion{1.0.0} % Required only if the 'docstage' is set to 'working'.
+
+%%% Document Metadata %%%
+\input{Metadata/Metadata}
+
+\begin{document}
+
+%%% Front Matter %%%
+\include{Matter/00-Cover}
+\include{Matter/01-Front-Page}
+
+%%% Table of Contents %%%
+\pagenumbering{roman}
+\bookmarktocentry\tableofcontents
+
+%%% Arabic Numeration %%%
+\pagenumbering{arabic}
+
+%%% Chapters %%%
+\include{Chapters/01-Introduccion}
+\include{Chapters/02-PA}
+\include{Chapters/03-VCO}
+\include{Chapters/04-Mixer}
+\include{Chapters/05-LNA}
+\include{Chapters/06-Conclusiones}
+
+%%% Bibliography %%%
+\renewcommand{\refname}{Bibliografía}
+\printbibliography[title={\refname},heading=bibintoc]
+
+%%% Appendices: Work that *YOU* Developed %%%
+% \appendix
+% \input{Matter/08-Appendices}
+% \input{Chapters/Appendices/00-AppendixA}
+% \input{Chapters/Appendices/01-AppendixB}
+
+%%% Annexes: Work that *YOU DID NOT* Develop %%%
+\input{Matter/09-Annexes}
+\input{Chapters/Annexes/01-AnnexConsignas}
+
+%%% Back Page %%%
+\input{Matter/10-Back-Page}
+
+\end{document}

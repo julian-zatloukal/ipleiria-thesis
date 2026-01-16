@@ -56,6 +56,13 @@
                 \includegraphics[width=0.485\linewidth]{Figures/Theme/Logotypes/IPLeiria-ESECS-Logo-W.pdf}
             \end{figure}
         }{}
+        
+        \ifthenelse{\equal{\SchoolOption}{utnfrba}}{
+            \begin{figure}
+                \includegraphics[width=0.485\linewidth]{Figures/Theme/Logotypes/UTN-FRBA-Logo-W.pdf}
+            \end{figure}
+            \vspace{-1.8\baselineskip}
+        }{}
     } {
         \ifthenelse{\equal{\SchoolOption}{estg}}{
             \begin{figure}
@@ -87,6 +94,13 @@
                 \includegraphics[width=0.485\linewidth]{Figures/Theme/Logotypes/IPLeiria-ESECS-Logo-B.pdf}
             \end{figure}
         }{}
+        
+        \ifthenelse{\equal{\SchoolOption}{utnfrba}}{
+            \begin{figure}
+                \includegraphics[width=0.485\linewidth]{Figures/Theme/Logotypes/UTN-FRBA-Logo-B.pdf}
+            \end{figure}
+            \vspace{-1.8\baselineskip}
+        }{}
     }
 
     \vspace{5.5\baselineskip}
@@ -111,19 +125,29 @@
         }
     }
 
-    \vspace{35pt}  
+    \vspace{45pt}  
 
     % Author.
-    {\noindent\bfseries\fontsize{14}{19}\selectfont\GetFirstAuthor}
+    {\noindent\fontsize{14}{19}\selectfont\GetFirstAuthor}
 
     \ifdefined\GetSecondAuthor
         \vspace{8pt}
-        {\noindent\bfseries\fontsize{14}{19}\selectfont\GetSecondAuthor}
+        {\noindent\fontsize{14}{19}\selectfont\GetSecondAuthor}
 	\fi
 
     \ifdefined\GetThirdAuthor
         \vspace{8pt}
-        {\noindent\bfseries\fontsize{14}{19}\selectfont\GetThirdAuthor}
+        {\noindent\fontsize{14}{19}\selectfont\GetThirdAuthor}
+	\fi
+
+    \ifdefined\GetFourthAuthor
+        \vspace{8pt}
+        {\noindent\fontsize{14}{19}\selectfont\GetFourthAuthor}
+	\fi
+
+    \ifdefined\GetFifthAuthor
+        \vspace{8pt}
+        {\noindent\fontsize{14}{19}\selectfont\GetFifthAuthor}
 	\fi
  
 	\vfill

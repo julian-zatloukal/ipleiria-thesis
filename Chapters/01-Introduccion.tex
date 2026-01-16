@@ -1,0 +1,135 @@
+\chapter{Introducción}
+\label{chap:introduccion}
+
+Este trabajo final de cursada tiene como objetivo afianzar los conocimientos teóricos y prácticos obtenidos durante la cursada, aplicándolos al diseño y simulación de un radar de onda continua de frecuencia modulada (FMCW). Las consignas completas del trabajo se encuentran en el \hyperref[annex:consignas]{Anexo \ref*{annex:consignas}}.
+
+El presente proyecto corresponde a un radar de onda continua modulada en frecuencia (FMCW) \cite{AlmelaFMCWRadar}. 
+Presentamos una breve descripción de la teoría de funcionamiento del sistema FMCW y de cada componente utilizado. 
+Luego se presenta el procedimiento de diseño para cada componente junto con los resultados experimentales de los componentes fabricados. 
+La frecuencia de operación es alrededor de $1\,\text{GHz}$. 
+Esta decisión se tomó por múltiples razones. 
+Primero, la frecuencia está dentro de una banda ISM. 
+En segundo lugar, esto permitió la fácil fabricación de circuitos de línea de transmisión de microondas ($\lambda/4$ es aproximadamente $40\,\text{mm}$) y también la soldadura manual de componentes discretos para terminación y polarización del amplificador. 
+Este trabajo se basa, en parte inspirado en el ``Coffee Can Radar'' y el ``Rabit Radar''.
+
+El objetivo es tener un radar FMCW que pueda ser diseñado y construido por un grupo de cuatro a cinco estudiantes.
+
+\section{Teoría FMCW}
+
+El radar FMCW es un radar simple que puede medir la distancia de un objeto estático y la velocidad de un objeto en movimiento. El principio básico de cualquier radar es emitir una señal electromagnética y medir su reflejo desde un objetivo. 
+El reflejo se produce debido a la superficie metálica del objetivo que dispersa energía en todas las direcciones, una pequeña cantidad de la cual recibe el Radar. 
+El radar más simple sería emitir una onda continua y medir la señal reflejada o dispersada. 
+El problema es que la señal recibida tendría la misma frecuencia que la señal transmitida, con solo una diferencia de fase. Esto daría como resultado que solo se pudiera estimar la distancia como:
+
+\begin{equation}
+d = n \cdot \lambda + \lambda \frac{\phi}{2 \pi}
+\end{equation}
+
+donde: $d$ es la distancia estimada, $n$ es cualquier valor entero, $\lambda$ es la longitud de onda y $\phi$ es la diferencia de fase entre las señales transmitida y recibida. 
+
+Como se puede ver, la distancia es ambigua, ya que la distancia podría ser cualquier múltiplo entero, $n$, de la longitud de onda. 
+Además, un sistema de este tipo sería sensible a los retardos de fase y de trayectos múltiples en el hardware de transmisión y recepción. 
+Sin embargo, la velocidad de un objetivo en movimiento podría medirse con este simple radar debido al desplazamiento Doppler, donde la diferencia de frecuencia está directamente relacionada con la velocidad del objeto:
+
+\begin{equation}
+\Delta f = 2 f_o \frac{v}{c}
+\end{equation}
+
+\noindent donde: $f_o$ es la frecuencia de transmisión, $v$ es la velocidad del objeto y $c$ es la velocidad de la luz.
+
+Una solución al problema de la ambigüedad de la distancia es utilizar un radar de barrido de frecuencia, como un radar FMCW. 
+
+La distancia del objetivo $d$ dará como resultado una señal reflejada que se mide a partir de $t$, donde $t$ es la suma del tiempo de viaje de la señal de transmisión saliente, que se envía desde el radar al objetivo, y el tiempo de retorno de la transmisión de la señal, que se refleja desde el objetivo de vuelta al radar. 
+Debido a esta diferencia, la señal recibida se desplazará en el tiempo. 
+Cuando la señal regrese al receptor, estará en una frecuencia diferente a la frecuencia de transmisión ya que el VCO ha cambiado de frecuencia durante $t$. 
+Este cambio de frecuencia se puede usar para determinar la distancia absoluta sin ambigüedad. 
+
+\noindent La distancia es:
+\begin{equation}
+d = c \frac{\Delta t}{2}
+\end{equation}
+
+\noindent donde:
+\begin{equation}
+\Delta t = \frac{\Delta f}{m}
+\end{equation}
+
+\noindent y $m$ es la pendiente de la rampa de frecuencia en $\text{Hz/s}$.
+
+\begin{figure}[htbp]
+\centering
+\begin{circuitikz}[scale=0.9, transform shape]
+	% DAC - offset higher and fixed hbox error using shortstack
+	\draw (6.75, 7.75) to[dac, l={\raisebox{2pt}{\shortstack{Generación\\Diente de Sierra}}}] (7.75, 7.75);
+    
+	% ADC - offset higher and fixed hbox error using shortstack
+	\draw (9, 5) to[adc, l={\raisebox{2pt}{\shortstack{Procesamiento\\de Datos}}}] (10, 5);
+    
+	\draw (8.5, 7.75) to[vco, l_=VCO] (10.25, 7.75);
+	\draw (11.062, 7.75) to[amp, l_=PA] (12.813, 7.75);
+	\draw (12.813, 5) to[amp, l={Amp. FI}] (11.062, 5);
+	\draw (13.5, 5) to[lowpass] (15, 5);
+    
+	\node[mixer](N1) at (16.49, 5){} node[anchor=north] at (N1.south){Mezclador};
+	\draw (19.5, 5) to[amp, l=LNA] (17.75, 5);
+    
+	\node[bareantenna](N2) at (17.5, 9){} node[anchor=east, align=right] at (N2.west){Antena\\Transmisora};
+	\node[bareantenna](N3) at (20.75, 6){} node[anchor=east, align=right] at (N3.west){Antena\\Receptora};
+	
+	\node[genericsplitter](N4) at (14.41, 7.75){} node[anchor=north, align=center] at ([yshift=-0.09cm]N4.south){Acoplador\\Direccional};
+    
+	\draw (7.75, 7.75) -- (8.5, 7.75);
+	\draw (10.25, 7.75) -- (11.062, 7.75);
+	\draw (12.813, 7.75) -- (13.5, 7.75);
+	\draw (15.32, 8.205) -| (17.5, 9);
+	\draw (15.32, 7.295) -| (16.5, 5.5);
+	\draw (16, 5) -- (15, 5);
+	\draw (16.98, 5) -- (17.75, 5);
+	\draw (19.5, 5) -| (20.75, 6);
+	\draw (10, 5) -- (11.062, 5);
+	\draw (12.813, 5) -- (13.5, 5);
+\end{circuitikz}
+\caption{Diagrama de bloques del sistema radar FMCW.}
+\label{fig:diagrama_fmcw}
+\end{figure}
+
+\noindent La Figura \ref{fig:diagrama_fmcw} muestra el diseño básico del sistema de un radar FMCW. 
+Un oscilador controlado por voltaje (VCO) es barrido entre dos frecuencias por una rampa lineal. 
+La función de transferencia de voltaje-frecuencia del VCO junto con la rampa de la señal de control determinarán la pendiente, $m$. 
+La función de transferencia de voltaje-frecuencia de un VCO es típicamente no lineal; por lo tanto, una señal de control lineal no dará como resultado un barrido de frecuencia lineal. 
+Para diseños de primer orden, esto puede ignorarse. 
+
+\noindent La señal de salida del VCO se alimenta a un amplificador de potencia (PA), donde se amplifica la señal. 
+Luego, la señal de salida del PA se divide mediante un divisor en una señal de potencia y una señal de oscilador local (LO). 
+El divisor en este diseño es un acoplador acoplado al borde con un acoplamiento de aproximadamente $-15\,\text{dB}$, de modo que el LO está $15\,\text{dB}$ por debajo de la señal de potencia. 
+La señal de potencia se envía a una antena de banda ancha. 
+Para este diseño, elegimos una antena Vivaldi antípoda, que es fácil de construir y tiene un ancho de banda amplio. 
+El receptor es una segunda antena que alimenta un amplificador de bajo ruido (LNA). La salida del LNA luego se pasa a banda base mediante un mezclador, usando la señal LO producida por el divisor. Por último, la señal convertida por el mezclador se filtra y amplifica para medirla. 
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{Figures/1_Introduccion/fmcw_sawtooth.png}
+\caption{Señal de rampa diente de sierra para modulación FMCW.}
+\label{fig:fmcw_sawtooth}
+\end{figure}
+
+\section{Procedimiento de Desarrollo}
+
+Para el desarrollo de cada etapa del sistema radar FMCW, se seguirá un procedimiento sistemático que garantiza un diseño ordenado y verificable. Los pasos a seguir son:
+
+\begin{enumerate}
+    \item \textbf{Definición de la etapa:} Definir a grandes rasgos la función de la etapa y su topología, junto con los requerimientos de la misma (ganancia, ancho de banda, impedancias de entrada/salida, niveles de potencia, etc.).
+    
+    \item \textbf{Investigación de componentes activos:} Investigar sobre los componentes activos de la etapa, descargar las hojas de datos correspondientes y analizar sus parámetros relevantes para la aplicación. Concluir la viabilidad de la etapa dado los elementos activos y los requerimientos.
+    
+    \item \textbf{Creación de los componentes en el proyecto:} Crear los componentes activos y relevantes dentro del proyecto de simulación, ya sea utilizando \textit{Design Kits} del fabricante, modelos de \textit{SPICE}, o bien utilizando los archivos \textit{S2P} de cada componente a una polarización dada.
+    
+    \item \textbf{Test bench de componentes:} Crear un test bench para cada componente activo o relevante del circuito, verificando su correcto funcionamiento de forma aislada antes de integrarlo en el diseño.
+    
+    \item \textbf{Diseño de la etapa:} Crear el diseño de la etapa combinando los elementos activos y pasivos, definiendo claramente los puertos de conexión hacia el exterior para facilitar la integración con otras etapas.
+    
+    \item \textbf{Afinación a frecuencia de operación:} Definir los valores de los componentes para lograr afinidad a una frecuencia de $1\,\text{GHz}$, utilizando la herramienta de optimización del ADS.
+    
+    \item \textbf{Verificación del diseño:} Crear un test bench para probar el core de la etapa, producir todos los gráficos y tablas necesarias, y verificar el cumplimiento de los requerimientos establecidos en el primer paso.
+\end{enumerate}
+
