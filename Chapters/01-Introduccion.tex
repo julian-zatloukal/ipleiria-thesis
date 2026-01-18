@@ -6,10 +6,10 @@ Este trabajo final de cursada tiene como objetivo afianzar los conocimientos te�
 El presente proyecto corresponde a un radar de onda continua modulada en frecuencia (FMCW) \cite{AlmelaFMCWRadar}. 
 Presentamos una breve descripción de la teoría de funcionamiento del sistema FMCW y de cada componente utilizado. 
 Luego se presenta el procedimiento de diseño para cada componente junto con los resultados experimentales de los componentes fabricados. 
-La frecuencia de operación es alrededor de $1\,\text{GHz}$. 
+La frecuencia de operación es alrededor de \qty{1}{\GHz}. 
 Esta decisión se tomó por múltiples razones. 
 Primero, la frecuencia está dentro de una banda ISM. 
-En segundo lugar, esto permitió la fácil fabricación de circuitos de línea de transmisión de microondas ($\lambda/4$ es aproximadamente $40\,\text{mm}$) y también la soldadura manual de componentes discretos para terminación y polarización del amplificador. 
+En segundo lugar, esto permitió la fácil fabricación de circuitos de línea de transmisión de microondas ($\lambda/4$ es aproximadamente \qty{40}{\mm}) y también la soldadura manual de componentes discretos para terminación y polarización del amplificador. 
 Este trabajo se basa, en parte inspirado en el ``Coffee Can Radar'' y el ``Rabit Radar''.
 
 El objetivo es tener un radar FMCW que pueda ser diseñado y construido por un grupo de cuatro a cinco estudiantes.
@@ -101,7 +101,7 @@ Para diseños de primer orden, esto puede ignorarse.
 
 \noindent La señal de salida del VCO se alimenta a un amplificador de potencia (PA), donde se amplifica la señal. 
 Luego, la señal de salida del PA se divide mediante un divisor en una señal de potencia y una señal de oscilador local (LO). 
-El divisor en este diseño es un acoplador acoplado al borde con un acoplamiento de aproximadamente $-15\,\text{dB}$, de modo que el LO está $15\,\text{dB}$ por debajo de la señal de potencia. 
+El divisor en este diseño es un acoplador acoplado al borde con un acoplamiento de aproximadamente \qty{-15}{\dB}, de modo que el LO está \qty{15}{\dB} por debajo de la señal de potencia. 
 La señal de potencia se envía a una antena de banda ancha. 
 Para este diseño, elegimos una antena Vivaldi antípoda, que es fácil de construir y tiene un ancho de banda amplio. 
 El receptor es una segunda antena que alimenta un amplificador de bajo ruido (LNA). La salida del LNA luego se pasa a banda base mediante un mezclador, usando la señal LO producida por el divisor. Por último, la señal convertida por el mezclador se filtra y amplifica para medirla. 
@@ -128,7 +128,7 @@ Para el desarrollo de cada etapa del sistema radar FMCW, se seguirá un procedim
     
     \item \textbf{Diseño de la etapa:} Crear el diseño de la etapa combinando los elementos activos y pasivos, definiendo claramente los puertos de conexión hacia el exterior para facilitar la integración con otras etapas.
     
-    \item \textbf{Afinación a frecuencia de operación:} Definir los valores de los componentes para lograr afinidad a una frecuencia de $1\,\text{GHz}$, utilizando la herramienta de optimización del ADS.
+    \item \textbf{Afinación a frecuencia de operación:} Definir los valores de los componentes para lograr afinidad a una frecuencia de \qty{1}{\GHz}, utilizando la herramienta de optimización del ADS.
     
     \item \textbf{Verificación del diseño:} Crear un test bench para probar el core de la etapa, producir todos los gráficos y tablas necesarias, y verificar el cumplimiento de los requerimientos establecidos en el primer paso.
 \end{enumerate}

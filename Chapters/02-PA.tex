@@ -18,10 +18,10 @@ La operación en Clase AB se caracteriza por los siguientes aspectos técnicos:
     El transistor se polariza con una corriente de colector de reposo ($I_{CQ}$) pequeña pero finita, situando el punto $Q$ ligeramente por encima de la región de corte. Esto resulta en un ángulo de conducción en el intervalo $\pi < \theta_c < 2\pi$ (típicamente entre $180^\circ$ y $220^\circ$).
     
     \item \textbf{Linealidad y Distorsión de Cruce:} 
-    La motivación principal para emplear Clase AB sobre la Clase B pura es la mitigación de la \textbf{distorsión de cruce} (\textit{crossover distortion}). En la Clase B ($V_{BE} \approx 0$), la no linealidad intrínseca de la unión base-emisor en torno al umbral de encendido ($V_\gamma \approx 0.7\text{V}$ para Si) genera armónicos de alto orden severos cuando la señal cruza por cero. La polarización de la Clase AB linealiza la función de transferencia en esta región crítica, reduciendo significativamente el contenido espectral espurio.
+    La motivación principal para emplear Clase AB sobre la Clase B pura es la mitigación de la \textbf{distorsión de cruce} (\textit{crossover distortion}). En la Clase B ($V_{BE} \approx 0$), la no linealidad intrínseca de la unión base-emisor en torno al umbral de encendido ($V_\gamma \approx \qty{0,7}{\V}$ para Si) genera armónicos de alto orden severos cuando la señal cruza por cero. La polarización de la Clase AB linealiza la función de transferencia en esta región crítica, reduciendo significativamente el contenido espectral espurio.
 
     \item \textbf{Eficiencia de Conversión:} 
-    Si bien la eficiencia teórica máxima de la Clase AB es inferior al límite ideal de la Clase B ($\eta_{max} \approx 78.5\%$), es sustancialmente superior a la de la Clase A ($\eta_{max} = 50\%$ con carga inductiva, típicamente $<25\%$ real). Esto permite manejar potencias de transmisión en el orden de vatios sin los requerimientos térmicos masivos de la Clase A.
+    Si bien la eficiencia teórica máxima de la Clase AB es inferior al límite ideal de la Clase B ($\eta_{max} \approx \qty{78,5}{\percent}$), es sustancialmente superior a la de la Clase A ($\eta_{max} = \qty{50}{\percent}$ con carga inductiva, típicamente $<\qty{25}{\percent}$ real). Esto permite manejar potencias de transmisión en el orden de vatios sin los requerimientos térmicos masivos de la Clase A.
 \end{itemize}
 
 Para este sistema, la Clase AB asegura que la señal modulada (FMCW) sea amplificada con una fidelidad suficiente para evitar la generación de productos de intermodulación que podrían elevar el piso de ruido del radar, manteniendo simultáneamente un consumo de corriente admisible para la fuente de alimentación.
@@ -33,17 +33,17 @@ Para este sistema, la Clase AB asegura que la señal modulada (FMCW) sea amplifi
 El diseño del Amplificador de Potencia debe cumplir con los siguientes requerimientos para asegurar su correcto funcionamiento dentro del sistema radar FMCW:
 
 \begin{itemize}
-    \item \textbf{Frecuencia central:} El diseño debe estar centrado a una frecuencia de $1\,\text{GHz}$.
+    \item \textbf{Frecuencia central:} El diseño debe estar centrado a una frecuencia de \qty{1}{\GHz}.
     
-    \item \textbf{Ancho de banda:} La etapa debe adaptar un ancho de banda de $50\,\text{MHz}$ (de $975\,\text{MHz}$ a $1025\,\text{MHz}$).
+    \item \textbf{Ancho de banda:} La etapa debe adaptar un ancho de banda de \qty{50}{\MHz} (de \qty{975}{\MHz} a \qty{1025}{\MHz}).
     
     \item \textbf{Adaptación de impedancia (S11):} 
     \begin{itemize}
-        \item El parámetro $S_{11}$ debe ser menor o igual a $-10\,\text{dB}$ dentro de toda la banda de paso.
-        \item En la frecuencia central ($1\,\text{GHz}$), el parámetro $S_{11}$ debe ser menor o igual a $-20\,\text{dB}$.
+        \item El parámetro $S_{11}$ debe ser menor o igual a \qty{-10}{\dB} dentro de toda la banda de paso.
+        \item En la frecuencia central (\qty{1}{\GHz}), el parámetro $S_{11}$ debe ser menor o igual a \qty{-20}{\dB}.
     \end{itemize}
     
-    \item \textbf{Ganancia (S21):} La ganancia de la etapa a la frecuencia central debe encontrarse dentro de un rango de $12\,\text{dB}$ a $15\,\text{dB}$, debido a las limitaciones inherentes del transistor BFU590G.
+    \item \textbf{Ganancia (S21):} La ganancia de la etapa a la frecuencia central debe encontrarse dentro de un rango de \qty{12}{\dB} a \qty{15}{\dB}, debido a las limitaciones inherentes del transistor BFU590G.
 \end{itemize}
 
 \subsection{Diseño de Referencia}
@@ -55,11 +55,11 @@ La arquitectura propuesta en la nota de aplicación consiste en un amplificador 
 \begin{itemize}
     \item \textbf{Componente activo:} Transistor NPN de banda ancha BFU590G con emisor conectado directamente a tierra para maximizar la ganancia de potencia.
     
-    \item \textbf{Red de entrada:} Incluye un capacitor de bloqueo de CC (100 pF), una red de adaptación LC (3.3 pF y 1.5 nH) para transformar la impedancia de entrada a 50 $\Omega$, y choques de RF (inductores de 470 nH) para aislar la fuente de polarización de la señal de RF.
+    \item \textbf{Red de entrada:} Incluye un capacitor de bloqueo de CC (\qty{100}{\pF}), una red de adaptación LC (\qty{3,3}{\pF} y \qty{1,5}{\nH}) para transformar la impedancia de entrada a \qty{50}{\ohm}, y choques de RF (inductores de \qty{470}{\nH}) para aislar la fuente de polarización de la señal de RF.
     
-    \item \textbf{Red de salida:} Comprende un RFC (Radio Frequency Choke) de 18 nH para suministrar continua al colector mientras presenta alta impedancia a la RF, junto con una red de adaptación (6.8 nH) y capacitor de bloqueo de continua (100 pF) en la salida.
+    \item \textbf{Red de salida:} Comprende un RFC (Radio Frequency Choke) de \qty{18}{\nH} para suministrar continua al colector mientras presenta alta impedancia a la RF, junto con una red de adaptación (\qty{6,8}{\nH}) y capacitor de bloqueo de continua (\qty{100}{\pF}) en la salida.
     
-    \item \textbf{Polarización:} Voltaje de alimentación $V_{cc} = 8\,\text{V}$ con capacitores de desacople (22 nF y 100 pF) para filtrar ruido.
+    \item \textbf{Polarización:} Voltaje de alimentación $V_{cc} = \qty{8}{\V}$ con capacitores de desacople (\qty{22}{\nF} y \qty{100}{\pF}) para filtrar ruido.
 \end{itemize}
 
 La Figura \ref{fig:pa_reference_schematic} muestra el esquemático del diseño de referencia extraído de la nota de aplicación.
@@ -73,9 +73,9 @@ La Figura \ref{fig:pa_reference_schematic} muestra el esquemático del diseño d
 \end{figure}
 
 
-Los resultados reportados en la nota de aplicación para el diseño a 866 MHz incluyen: potencia de salida P1dB de 27 dBm, eficiencia del 55\%, y ganancia de 10 dB. El documento también indica que el diseño puede sintonizarse a otras frecuencias modificando los valores de los componentes en las redes de adaptación.
+Los resultados reportados en la nota de aplicación para el diseño a \qty{866}{\MHz} incluyen: potencia de salida P1dB de \qty{27}{\dBm}, eficiencia del \qty{55}{\percent}, y ganancia de \qty{10}{\dB}. El documento también indica que el diseño puede sintonizarse a otras frecuencias modificando los valores de los componentes en las redes de adaptación.
 
-Para adaptar este diseño de referencia a la frecuencia central de $1\,\text{GHz}$, requerida por el radar, se redefinirán los valores de algunos componentes utilizando la herramienta de optimización.
+Para adaptar este diseño de referencia a la frecuencia central de \qty{1}{\GHz}, requerida por el radar, se redefinirán los valores de algunos componentes utilizando la herramienta de optimización.
 
 \subsection{Incorporación del BFU590G a la Librería del Proyecto}
 
@@ -91,9 +91,9 @@ Una vez instalado el design kit, se utilizó la plantilla de test bench \texttt{
 \label{fig:bfu590g_testbench}
 \end{figure}
 
-El circuito consiste en el transistor en configuración de emisor común, con una fuente de voltaje que varía $V_{CE}$ de 0 a 5 V en pasos de 0.1 V, y un barrido paramétrico de la corriente de base $I_{BB}$ desde $20\,\mu\text{A}$ hasta $100\,\mu\text{A}$ en incrementos de $10\,\mu\text{A}$.
+El circuito consiste en el transistor en configuración de emisor común, con una fuente de voltaje que varía $V_{CE}$ de \qty{0}{\V} a \qty{5}{\V} en pasos de \qty{0,1}{\V}, y un barrido paramétrico de la corriente de base $I_{BB}$ desde \qty{20}{\uA} hasta \qty{100}{\uA} en incrementos de \qty{10}{\uA}.
 
-Los resultados de la simulación se presentan en la Figura \ref{fig:bfu590g_results}, donde se observan las curvas de corriente de colector $I_C$ en función del voltaje $V_{CE}$ para cada nivel de corriente de base. El marcador indica un punto de operación representativo en $V_{CE} = 3\,\text{V}$ e $I_C = 6\,\text{mA}$, con un consumo de potencia de aproximadamente 17 mW.
+Los resultados de la simulación se presentan en la Figura \ref{fig:bfu590g_results}, donde se observan las curvas de corriente de colector $I_C$ en función del voltaje $V_{CE}$ para cada nivel de corriente de base. El marcador indica un punto de operación representativo en $V_{CE} = \qty{3}{\V}$ e $I_C = \qty{6}{\mA}$, con un consumo de potencia de aproximadamente \qty{17}{\mW}.
 
 \begin{figure}[htbp]
 \centering
@@ -129,7 +129,7 @@ El esquemático interno implementa la topología del diseño de referencia AN115
     \item \textbf{Alimentación:} Voltaje de colector fijo de $V_{CC} = 8\,\text{V}$ con filtrado adecuado.
 \end{itemize}
 
-La Tabla \ref{tab:pa_core_params} resume los parámetros configurables del componente y sus valores iniciales, extraídos del diseño de referencia para 866 MHz. Estos valores servirán como punto de partida para la optimización a $1\,\text{GHz}$.
+La Tabla \ref{tab:pa_core_params} resume los parámetros configurables del componente y sus valores iniciales, extraídos del diseño de referencia para \qty{866}{\MHz}. Estos valores servirán como punto de partida para la optimización a \qty{1}{\GHz}.
 
 \begin{table}[!htb]
 \centering
@@ -149,7 +149,7 @@ La Tabla \ref{tab:pa_core_params} resume los parámetros configurables del compo
 \end{tabular}
 \end{table}
 
-El valor de \texttt{Vbias} se establece inicialmente en $0.8\,\text{V}$ para situar el transistor en Clase AB, y será ajustado posteriormente mediante optimización para obtener el punto de operación óptimo. Los valores de los componentes reactivos (\texttt{C\_in}, \texttt{L\_in}, \texttt{L\_feed}, \texttt{L\_out}) corresponden al diseño de 866 MHz y serán reoptimizados para la frecuencia central de $1\,\text{GHz}$.
+El valor de \texttt{Vbias} se establece inicialmente en \qty{0,8}{\V} para situar el transistor en Clase AB, y será ajustado posteriormente mediante optimización para obtener el punto de operación óptimo. Los valores de los componentes reactivos (\texttt{C\_in}, \texttt{L\_in}, \texttt{L\_feed}, \texttt{L\_out}) corresponden al diseño de \qty{866}{\MHz} y serán reoptimizados para la frecuencia central de \qty{1}{\GHz}.
 
 \subsection{Optimización de Componentes para Frecuencia Central de 1 GHz}
 
@@ -172,15 +172,15 @@ El esquemático incluye los siguientes bloques de configuración:
 \begin{itemize}
     \item \textbf{Bloque OPTIM:} Utiliza un algoritmo de tipo \textit{Gradient} (Gradiente), configurado para realizar un máximo de 100 iteraciones.
     
-    \item \textbf{Bloque S-PARAMETERS:} Define el rango de frecuencia de barrido desde $0.5\,\text{GHz}$ hasta $1.5\,\text{GHz}$.
+    \item \textbf{Bloque S-PARAMETERS:} Define el rango de frecuencia de barrido desde \qty{0,5}{\GHz} hasta \qty{1,5}{\GHz}.
     
     \item \textbf{Goal 1 ($S_{11}$):} Define las metas para la adaptación de entrada:
     \begin{itemize}
-        \item $S_{11} \leq -10\,\text{dB}$ en el rango de $975\,\text{MHz}$ a $1025\,\text{MHz}$.
-        \item $S_{11} \leq -20\,\text{dB}$ a la frecuencia central de $1\,\text{GHz}$.
+        \item $S_{11} \leq \qty{-10}{\dB}$ en el rango de \qty{975}{\MHz} a \qty{1025}{\MHz}.
+        \item $S_{11} \leq \qty{-20}{\dB}$ a la frecuencia central de \qty{1}{\GHz}.
     \end{itemize}
     
-    \item \textbf{Goal 2 ($S_{21}$):} Define la meta para la ganancia: $S_{21} \geq 12\,\text{dB}$ a $1\,\text{GHz}$.
+    \item \textbf{Goal 2 ($S_{21}$):} Define la meta para la ganancia: $S_{21} \geq \qty{12}{\dB}$ a \qty{1}{\GHz}.
 \end{itemize}
 
 Los parámetros habilitados para optimización son \texttt{C\_in}, \texttt{L\_in}, \texttt{L\_feed} y \texttt{L\_out}, identificados con la marca \texttt{\{o\}} en el bloque de variables.
@@ -260,7 +260,7 @@ Las siguientes figuras comparan el comportamiento del amplificador con los valor
 \label{fig:pa_s11_comparison}
 \end{figure}
 
-La Figura \ref{fig:pa_s11_comparison} evidencia la resintonización del amplificador. Con los valores originales, el parámetro $S_{11}$ presenta valores relativamente constantes alrededor de $-3$ a $-6$ dB en todo el rango, sin un punto de adaptación definido. Tras la optimización, se observa una pronunciada caída de $S_{11}$ centrada en $1\,\text{GHz}$, alcanzando valores inferiores a $-50\,\text{dB}$ en la frecuencia central y cumpliendo holgadamente el requisito de $-20\,\text{dB}$.
+La Figura \ref{fig:pa_s11_comparison} evidencia la resintonización del amplificador. Con los valores originales, el parámetro $S_{11}$ presenta valores relativamente constantes alrededor de \qty{-3}{\dB} a \qty{-6}{\dB} en todo el rango, sin un punto de adaptación definido. Tras la optimización, se observa una pronunciada caída de $S_{11}$ centrada en \qty{1}{\GHz}, alcanzando valores inferiores a \qty{-50}{\dB} en la frecuencia central y cumpliendo holgadamente el requisito de \qty{-20}{\dB}.
 
 \begin{figure}[htbp]
 \centering
@@ -309,7 +309,7 @@ La Figura \ref{fig:pa_s11_comparison} evidencia la resintonización del amplific
 \label{fig:pa_s21_comparison}
 \end{figure}
 
-La Figura \ref{fig:pa_s21_comparison} muestra la respuesta de ganancia del amplificador. Con los valores originales diseñados para 866 MHz, la ganancia presenta una respuesta decreciente con la frecuencia, iniciando en aproximadamente 13 dB a 500 MHz y cayendo progresivamente. Después de la optimización, la ganancia muestra un pico pronunciado centrado en $1\,\text{GHz}$, alcanzando aproximadamente $\mathbf{11.5\,\text{dB}}$ en la frecuencia central, valor cercano al objetivo de $12\,\text{dB}$.
+La Figura \ref{fig:pa_s21_comparison} muestra la respuesta de ganancia del amplificador. Con los valores originales diseñados para \qty{866}{\MHz}, la ganancia presenta una respuesta decreciente con la frecuencia, iniciando en aproximadamente \qty{13}{\dB} a \qty{500}{\MHz} y cayendo progresivamente. Después de la optimización, la ganancia muestra un pico pronunciado centrado en \qty{1}{\GHz}, alcanzando aproximadamente $\mathbf{\qty{11,5}{\dB}}$ en la frecuencia central, valor cercano al objetivo de \qty{12}{\dB}.
 
 \subsubsection{Valores Optimizados de los Componentes}
 
@@ -332,7 +332,7 @@ La Tabla \ref{tab:pa_opt_values} resume los valores de los componentes antes y d
 \end{tabular}
 \end{table}
 
-El proceso de optimización permite adaptar exitosamente el diseño de referencia de $866\,\text{MHz}$ a la frecuencia central de $1\,\text{GHz}$ requerida por el sistema radar, cumpliendo con los objetivos de adaptación de entrada ($S_{11} < -20\,\text{dB}$ a $1\,\text{GHz}$) y aproximándose al objetivo de ganancia ($S_{21} \approx 12\,\text{dB}$).
+El proceso de optimización permite adaptar exitosamente el diseño de referencia de \qty{866}{\MHz} a la frecuencia central de \qty{1}{\GHz} requerida por el sistema radar, cumpliendo con los objetivos de adaptación de entrada ($S_{11} < \qty{-20}{\dB}$ a \qty{1}{\GHz}) y aproximándose al objetivo de ganancia ($S_{21} \approx \qty{12}{\dB}$).
 
 \subsection{Optimización de Tensión de Polarización}
 
@@ -353,20 +353,20 @@ La Figura \ref{fig:pa_vbias_circuit} muestra el esquema de simulación configura
 El esquemático incluye los siguientes bloques de configuración:
 
 \begin{itemize}
-    \item \textbf{Bloque HARMONIC BALANCE (HB1):} A diferencia de los parámetros S (que son lineales), el Balance Armónico analiza la distorsión y el comportamiento no lineal a $1.0\,\text{GHz}$. Se ha configurado con un orden de 5 para capturar los armónicos.
+    \item \textbf{Bloque HARMONIC BALANCE (HB1):} A diferencia de los parámetros S (que son lineales), el Balance Armónico analiza la distorsión y el comportamiento no lineal a \qty{1,0}{\GHz}. Se ha configurado con un orden de 5 para capturar los armónicos.
     
     \item \textbf{Bloque OPTIM:} Configurado para optimizar específicamente la variable \texttt{Vbias}, utilizando el algoritmo de Gradiente con un máximo de 25 iteraciones.
     
-    \item \textbf{Bloque GOAL (OptimGoal1):} La meta establecida es que la ganancia (\texttt{Gain\_dB}) sea mayor a $13\,\text{dB}$.
+    \item \textbf{Bloque GOAL (OptimGoal1):} La meta establecida es que la ganancia (\texttt{Gain\_dB}) sea mayor a \qty{13}{\dB}.
     
-    \item \textbf{Variables de Circuito:} Los valores de $C\_in$, $L\_in$, $L\_feed$ y $L\_out$ se mantienen fijos en 16, 0.75, 16 y 22 respectivamente (valores comerciales de la optimización previa).
+    \item \textbf{Variables de Circuito:} Los valores de $C\_in$, $L\_in$, $L\_feed$ y $L\_out$ se mantienen fijos en \num{16}, \num{0,75}, \num{16} y \num{22} respectivamente (valores comerciales de la optimización previa).
     
     \item \textbf{Componentes de Medición:} Se utilizan sondas de potencia (\texttt{P\_Probe}) en la entrada (\texttt{Pin}) y salida (\texttt{Pout}) para calcular la ganancia de forma precisa.
 \end{itemize}
 
 \subsubsection{Vista General del Barrido de Vbias}
 
-Antes de ejecutar la optimización automática, se realizó un barrido paramétrico de la tensión de polarización para observar la tendencia del comportamiento. La Figura \ref{fig:pa_vbias_sweep} muestra la ganancia en función de \texttt{Vbias} en el rango de $0.7\,\text{V}$ a $0.95\,\text{V}$.
+Antes de ejecutar la optimización automática, se realizó un barrido paramétrico de la tensión de polarización para observar la tendencia del comportamiento. La Figura \ref{fig:pa_vbias_sweep} muestra la ganancia en función de \texttt{Vbias} en el rango de \qty{0,7}{\V} a \qty{0,95}{\V}.
 
 \begin{figure}[htbp]
 \centering
@@ -423,7 +423,7 @@ Antes de ejecutar la optimización automática, se realizó un barrido paramétr
 \label{fig:pa_vbias_sweep}
 \end{figure}
 
-Se observa que la ganancia presenta un máximo en torno a $0.855\,\text{V}$, alcanzando aproximadamente $11.6\,\text{dB}$. Para valores de \texttt{Vbias} superiores a $0.9\,\text{V}$, la ganancia cae abruptamente debido a que el transistor entra en una zona de saturación excesiva.
+Se observa que la ganancia presenta un máximo en torno a \qty{0,855}{\V}, alcanzando aproximadamente \qty{11,6}{\dB}. Para valores de \texttt{Vbias} superiores a \qty{0,9}{\V}, la ganancia cae abruptamente debido a que el transistor entra en una zona de saturación excesiva.
 
 \subsubsection{Resultados de la Optimización}
 
@@ -440,14 +440,14 @@ La Figura \ref{fig:pa_vbias_cockpit} muestra el panel de control de optimizació
 El proceso de optimización se detuvo en la \textbf{iteración 5 de 25} debido a que el algoritmo detectó que se había alcanzado el punto máximo donde ya no era posible mejorar más. El software determinó que el valor ideal para \texttt{Vbias} es:
 
 \begin{equation}
-\boxed{V_{bias} = 0.854834\,\text{V}}
+\boxed{V_{bias} = \qty{0,854834}{\V}}
 \end{equation}
 
-Este ligero aumento respecto al valor inicial de $0.8\,\text{V}$ desplaza al transistor a una zona de mayor conducción, lo que incrementa la ganancia disponible.
+Este ligero aumento respecto al valor inicial de \qty{0,8}{\V} desplaza al transistor a una zona de mayor conducción, lo que incrementa la ganancia disponible.
 
 \subsubsection{Parámetros S con Valores Finales}
 
-Las siguientes figuras presentan los parámetros S del amplificador con los valores comerciales de componentes optimizados y la tensión de polarización ajustada a $0.854834\,\text{V}$.
+Las siguientes figuras presentan los parámetros S del amplificador con los valores comerciales de componentes optimizados y la tensión de polarización ajustada a \qty{0,854834}{\V}.
 
 \begin{figure}[htbp]
 \centering
@@ -491,7 +491,7 @@ Las siguientes figuras presentan los parámetros S del amplificador con los valo
 \label{fig:pa_s11_final}
 \end{figure}
 
-La Figura \ref{fig:pa_s11_final} muestra que el parámetro $S_{11}$ presenta una adaptación óptima centrada en $1\,\text{GHz}$, alcanzando valores inferiores a $-25\,\text{dB}$ en la frecuencia central. Dentro de la banda de paso ($975\,\text{MHz}$ a $1025\,\text{MHz}$), el $S_{11}$ se mantiene por debajo de $-10\,\text{dB}$, cumpliendo holgadamente el requisito especificado.
+La Figura \ref{fig:pa_s11_final} muestra que el parámetro $S_{11}$ presenta una adaptación óptima centrada en \qty{1}{\GHz}, alcanzando valores inferiores a \qty{-25}{\dB} en la frecuencia central. Dentro de la banda de paso (\qty{975}{\MHz} a \qty{1025}{\MHz}), el $S_{11}$ se mantiene por debajo de \qty{-10}{\dB}, cumpliendo holgadamente el requisito especificado.
 
 \begin{figure}[htbp]
 \centering
@@ -531,7 +531,7 @@ La Figura \ref{fig:pa_s11_final} muestra que el parámetro $S_{11}$ presenta una
 \label{fig:pa_s21_final}
 \end{figure}
 
-La Figura \ref{fig:pa_s21_final} muestra la respuesta de ganancia del amplificador optimizado. Se observa un pico de ganancia centrado en $1\,\text{GHz}$, alcanzando aproximadamente $\mathbf{11.6\,\text{dB}}$ en la frecuencia central. Este valor se encuentra dentro del rango objetivo de $12\pm3\,\text{dB}$ especificado para la etapa.
+La Figura \ref{fig:pa_s21_final} muestra la respuesta de ganancia del amplificador optimizado. Se observa un pico de ganancia centrado en \qty{1}{\GHz}, alcanzando aproximadamente $\mathbf{\qty{11,6}{\dB}}$ en la frecuencia central. Este valor se encuentra dentro del rango objetivo de $\qty{12}{\dB}\pm\qty{3}{\dB}$ especificado para la etapa.
 
 \begin{figure}[htbp]
 \centering
@@ -571,7 +571,7 @@ La Figura \ref{fig:pa_s21_final} muestra la respuesta de ganancia del amplificad
 \label{fig:pa_s22_final}
 \end{figure}
 
-La Figura \ref{fig:pa_s22_final} muestra la adaptación de salida del amplificador. Se observa que el $S_{22}$ alcanza un mínimo pronunciado en torno a $1.01\,\text{GHz}$, con valores inferiores a $-30\,\text{dB}$. Este resultado indica una excelente adaptación en la salida del amplificador.
+La Figura \ref{fig:pa_s22_final} muestra la adaptación de salida del amplificador. Se observa que el $S_{22}$ alcanza un mínimo pronunciado en torno a \qty{1,01}{\GHz}, con valores inferiores a \qty{-30}{\dB}. Este resultado indica una excelente adaptación en la salida del amplificador.
 
 \begin{figure}[htbp]
 \centering
@@ -607,7 +607,7 @@ La Figura \ref{fig:pa_s22_final} muestra la adaptación de salida del amplificad
 \label{fig:pa_s12_final}
 \end{figure}
 
-La Figura \ref{fig:pa_s12_final} presenta el aislamiento inverso del amplificador ($S_{12}$). Los valores se mantienen por debajo de $-12\,\text{dB}$ en todo el rango de frecuencias, alcanzando un mínimo de aproximadamente $-27\,\text{dB}$ en la banda de operación. Este nivel de aislamiento es adecuado para evitar la realimentación de señales desde la salida hacia la entrada.
+La Figura \ref{fig:pa_s12_final} presenta el aislamiento inverso del amplificador ($S_{12}$). Los valores se mantienen por debajo de \qty{-12}{\dB} en todo el rango de frecuencias, alcanzando un mínimo de aproximadamente \qty{-27}{\dB} en la banda de operación. Este nivel de aislamiento es adecuado para evitar la realimentación de señales desde la salida hacia la entrada.
 
 \subsubsection{Resumen de Valores Finales del Diseño}
 
@@ -634,9 +634,9 @@ La Tabla \ref{tab:pa_final_values} resume los valores finales del amplificador d
 En este punto, el diseño del amplificador está prácticamente completo en el simulador, habiendo logrado:
 
 \begin{enumerate}
-    \item \textbf{Adaptación de Impedancias:} Optimizada para $1\,\text{GHz}$ con $S_{11} < -25\,\text{dB}$.
-    \item \textbf{Punto de Operación DC:} Optimizado a $\approx 0.855\,\text{V}$ para obtener la máxima ganancia disponible.
-    \item \textbf{Ganancia:} Aproximadamente $11.6\,\text{dB}$ a la frecuencia central, cercano al objetivo de $12\,\text{dB}$.
+    \item \textbf{Adaptación de Impedancias:} Optimizada para \qty{1}{\GHz} con $S_{11} < \qty{-25}{\dB}$.
+    \item \textbf{Punto de Operación DC:} Optimizado a $\approx \qty{0,855}{\V}$ para obtener la máxima ganancia disponible.
+    \item \textbf{Ganancia:} Aproximadamente \qty{11,6}{\dB} a la frecuencia central, cercano al objetivo de \qty{12}{\dB}.
 \end{enumerate}
 
 \subsection{Análisis de Espectro de Salida}
@@ -656,11 +656,11 @@ La Figura \ref{fig:pa_spectrum_circuit} muestra el esquemático consolidado del 
 \end{figure}
 
 
-La simulación de Balance Armónico se configura con orden 5, lo que permite analizar hasta el quinto armónico de la frecuencia fundamental. La fuente de entrada (\texttt{P\_1Tone}) se configura con una potencia de $0\,\text{dBm}$ y una impedancia de $50\,\Omega$.
+La simulación de Balance Armónico se configura con orden 5, lo que permite analizar hasta el quinto armónico de la frecuencia fundamental. La fuente de entrada (\texttt{P\_1Tone}) se configura con una potencia de \qty{0}{\dBm} y una impedancia de \qty{50}{\ohm}.
 
 \subsubsection{Espectro de Salida}
 
-La Figura \ref{fig:pa_output_spectrum} presenta el espectro de potencia a la salida del amplificador para una entrada de $0\,\text{dBm}$ a $1\,\text{GHz}$.
+La Figura \ref{fig:pa_output_spectrum} presenta el espectro de potencia a la salida del amplificador para una entrada de \qty{0}{\dBm} a \qty{1}{\GHz}.
 
 \begin{figure}[htbp]
 \centering
@@ -704,10 +704,10 @@ La Figura \ref{fig:pa_output_spectrum} presenta el espectro de potencia a la sal
 Los resultados muestran:
 
 \begin{itemize}
-    \item \textbf{Fundamental (1 GHz):} $P_{out} = 11.61\,\text{dBm}$, correspondiente a una ganancia de $11.61\,\text{dB}$ para una entrada de $0\,\text{dBm}$.
-    \item \textbf{Segundo armónico (2 GHz):} $-36.28\,\text{dBm}$, aproximadamente $48\,\text{dB}$ por debajo del fundamental.
-    \item \textbf{Tercer armónico (3 GHz):} $-56.58\,\text{dBm}$, aproximadamente $68\,\text{dB}$ por debajo del fundamental.
-    \item \textbf{Armónicos superiores:} Por debajo de $-70\,\text{dBm}$, despreciables.
+    \item \textbf{Fundamental (\qty{1}{\GHz}):} $P_{out} = \qty{11,61}{\dBm}$, correspondiente a una ganancia de \qty{11,61}{\dB} para una entrada de \qty{0}{\dBm}.
+    \item \textbf{Segundo armónico (\qty{2}{\GHz}):} \qty{-36,28}{\dBm}, aproximadamente \qty{48}{\dB} por debajo del fundamental.
+    \item \textbf{Tercer armónico (\qty{3}{\GHz}):} \qty{-56,58}{\dBm}, aproximadamente \qty{68}{\dB} por debajo del fundamental.
+    \item \textbf{Armónicos superiores:} Por debajo de \qty{-70}{\dBm}, despreciables.
 \end{itemize}
 
 \subsubsection{Distorsión Armónica Total (THD)}
@@ -721,11 +721,11 @@ THD = \sqrt{\frac{P_2 + P_3 + P_4 + P_5}{P_1}} \times 100\%
 Convirtiendo los valores de dBm a potencia lineal:
 
 \begin{align}
-P_1 &= 10^{11.61/10} = 14.49\,\text{mW} \nonumber \\
-P_2 &= 10^{-36.28/10} = 2.36 \times 10^{-4}\,\text{mW} \nonumber \\
-P_3 &= 10^{-56.58/10} = 2.20 \times 10^{-6}\,\text{mW} \nonumber \\
-P_4 &= 10^{-72.85/10} = 5.19 \times 10^{-8}\,\text{mW} \nonumber \\
-P_5 &= 10^{-86.91/10} = 2.04 \times 10^{-9}\,\text{mW}
+P_1 &= 10^{11{,}61/10} = \qty{14,49}{\mW} \nonumber \\
+P_2 &= 10^{-36{,}28/10} = \qty{2,36e-4}{\mW} \nonumber \\
+P_3 &= 10^{-56{,}58/10} = \qty{2,20e-6}{\mW} \nonumber \\
+P_4 &= 10^{-72{,}85/10} = \qty{5,19e-8}{\mW} \nonumber \\
+P_5 &= 10^{-86{,}91/10} = \qty{2,04e-9}{\mW}
 \end{align}
 
 Sustituyendo en la ecuación:
@@ -734,7 +734,7 @@ Sustituyendo en la ecuación:
 THD = \sqrt{\frac{2.36 \times 10^{-4}}{14.49}} \times 100\% \approx \mathbf{0.40\%}
 \end{equation}
 
-Este valor de THD es equivalente a aproximadamente $-48\,\text{dB}$ respecto al fundamental, lo cual es aceptable para aplicaciones de radar donde la pureza espectral moderada es suficiente.
+Este valor de THD es equivalente a aproximadamente \qty{-48}{\dB} respecto al fundamental, lo cual es aceptable para aplicaciones de radar donde la pureza espectral moderada es suficiente.
 
 \subsubsection{Resumen del Rendimiento Final}
 
@@ -749,19 +749,19 @@ La Tabla \ref{tab:pa_performance_summary} resume las características de rendimi
 \toprule
 \textbf{Parámetro} & \textbf{Valor} & \textbf{Unidad} \\
 \midrule
-Frecuencia central        & 1.0    & GHz \\
-Potencia de entrada       & 0      & dBm \\
-Potencia de salida        & 11.61  & dBm \\
-Ganancia                  & 11.61  & dB \\
-$S_{11}$ @ 1 GHz          & $< -25$ & dB \\
-$S_{22}$ @ 1 GHz          & $< -16$ & dB \\
-THD                       & 0.40   & \% \\
-2do Armónico (supresión)  & $-48$  & dBc \\
+Frecuencia central        & \num{1,0}    & \unit{\GHz} \\
+Potencia de entrada       & \num{0}      & \unit{\dBm} \\
+Potencia de salida        & \num{11,61}  & \unit{\dBm} \\
+Ganancia                  & \num{11,61}  & \unit{\dB} \\
+$S_{11}$ @ \qty{1}{\GHz}          & $< \num{-25}$ & \unit{\dB} \\
+$S_{22}$ @ \qty{1}{\GHz}          & $< \num{-16}$ & \unit{\dB} \\
+THD                       & \num{0,40}   & \unit{\percent} \\
+2do Armónico (supresión)  & $\num{-48}$  & \unit{\dBc} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Este análisis espectral marca el fin de la síntesis del circuito. El diseño ha evolucionado desde la nota de aplicación de referencia hasta un amplificador personalizado y optimizado para $1\,\text{GHz}$, con parámetros de polarización precisos y rendimiento validado.
+Este análisis espectral marca el fin de la síntesis del circuito. El diseño ha evolucionado desde la nota de aplicación de referencia hasta un amplificador personalizado y optimizado para \qty{1}{\GHz}, con parámetros de polarización precisos y rendimiento validado.
 
 \section{Conclusiones}
 

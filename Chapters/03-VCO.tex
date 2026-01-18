@@ -218,7 +218,7 @@ Los resultados obtenidos fueron $C_{\text{couple}} = \qty{2,82587}{\pF}$ y $C_t 
 De la curva se comprueba que para generar la señal chirp de \qty{50}{\MHz} (de \qty{975}{\MHz} a \qty{1025}{\MHz}) a la salida del VCO, se necesita una señal de diente de sierra a la entrada que varíe aproximadamente de \qty{0,035}{\V} a \qty{1,105}{\V}. Una linealización de la curva en la región activa (\qty{0,6}{\V} a \qty{2,5}{\V}) propone la siguiente ecuación de transferencia:
 
 \begin{equation}
-f(V_{\text{tune}}) = 67.89 \cdot V_{\text{tune}} + 948.89 \quad [\text{MHz}]
+f(V_{\text{tune}}) = \num{67,89} \cdot V_{\text{tune}} + \num{948,89} \quad [\unit{\MHz}]
 \label{eq:vco_transfer}
 \end{equation}
 
@@ -244,7 +244,7 @@ El criterio de Nyquist para osciladores basados en realimentación positiva esta
 \label{fig:vco_stability_results}
 \end{figure}
 
-La primera condición de arranque de oscilación requiere que la fase de $S_{11}$ sea de \qty{0}{\degree} a la frecuencia de oscilación. De los resultados se obtiene que a \qty{1,132}{\GHz} la fase es de aproximadamente \qty{0,098}{\degree}, cumpliendo esta condición. La segunda condición establece que la magnitud de $S_{11}$ debe ser mayor que 1; en este caso, la ganancia del lazo es de 5.866 (en veces), verificando así la condición de arranque.
+La primera condición de arranque de oscilación requiere que la fase de $S_{11}$ sea de \qty{0}{\degree} a la frecuencia de oscilación. De los resultados se obtiene que a \qty{1,132}{\GHz} la fase es de aproximadamente \qty{0,098}{\degree}, cumpliendo esta condición. La segunda condición establece que la magnitud de $S_{11}$ debe ser mayor que 1; en este caso, la ganancia del lazo es de \num{5,866} (en veces), verificando así la condición de arranque.
 
 Se puede concluir que el circuito oscilará correctamente y será capaz de sostener esta oscilación en el tiempo.
 
@@ -348,7 +348,7 @@ En la Figura \ref{fig:vco_real_zin} se muestra la parte real de la impedancia de
 
 % Marcador a 1 GHz
 \addplot[only marks, mark=*, mark size=3pt, red] coordinates {(1.005, -69.01)};
-\node[anchor=south west, font=\scriptsize, fill=white, inner sep=2pt] at (axis cs:1.05,-85.01) {$-69.0\ \Omega$ @ 1.005 GHz};
+\node[anchor=south west, font=\scriptsize, fill=white, inner sep=2pt] at (axis cs:1.05,-85.01) {\qty{-69,0}{\ohm} @ \qty{1,005}{\GHz}};
 
 \end{axis}
 \end{tikzpicture}
@@ -383,7 +383,7 @@ A la frecuencia de interés (aproximadamente \qty{1}{\GHz}), la parte real de la
 
 % Marcador a 1 GHz
 \addplot[only marks, mark=*, mark size=3pt, blue] coordinates {(1.005, -23.40)};
-\node[anchor=south west, font=\scriptsize, fill=white, inner sep=2pt] at (axis cs:1.05,-35.40) {$-23.4\ \Omega$ @ 1.005 GHz};
+\node[anchor=south west, font=\scriptsize, fill=white, inner sep=2pt] at (axis cs:1.05,-35.40) {\qty{-23,4}{\ohm} @ \qty{1,005}{\GHz}};
 
 \end{axis}
 \end{tikzpicture}
