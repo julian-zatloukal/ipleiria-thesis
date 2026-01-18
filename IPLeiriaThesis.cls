@@ -174,6 +174,14 @@
 \RequirePackage{pgfplotstable} % Load data from external files.
 \pgfplotsset{compat=1.18} % Use modern pgfplots features.
 \RequirePackage{circuitikz} % Circuit diagrams with TikZ.
+\RequirePackage{siunitx} % SI units formatting.
+\sisetup{
+  output-decimal-marker = {,},
+  inter-unit-product = \ensuremath{{}\cdot{}},
+  separate-uncertainty = true
+}
+\DeclareSIUnit{\dBm}{dBm}
+\DeclareSIUnit{\dBc}{dBc}
 \RequirePackage{psvectorian} % To include in-text ornamatentions. 
 \RequirePackage{blindtext} % Generate placeholder text.
 \usepackage{bm}

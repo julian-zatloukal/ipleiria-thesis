@@ -5,13 +5,13 @@ Este capítulo presenta el diseño y simulación del Oscilador Controlado por Te
 
 \section{Introducción Teórica}
 
-Un Oscilador Controlado por Tensión (VCO, por sus siglas en inglés \textit{Voltage Controlled Oscillator}) es un dispositivo capaz de generar una señal periódica cuya frecuencia de oscilación varía en función de una tensión de control aplicada a su entrada. La relación entre la tensión de control $V_{\text{ctrl}}$ y la frecuencia de salida $f_{\text{out}}$ se denomina función de transferencia o sensibilidad del VCO, y se expresa típicamente en $\text{MHz/V}$.
+Un Oscilador Controlado por Tensión (VCO, por sus siglas en inglés \textit{Voltage Controlled Oscillator}) es un dispositivo capaz de generar una señal periódica cuya frecuencia de oscilación varía en función de una tensión de control aplicada a su entrada. La relación entre la tensión de control $V_{\text{ctrl}}$ y la frecuencia de salida $f_{\text{out}}$ se denomina función de transferencia o sensibilidad del VCO, y se expresa típicamente en \unit{\MHz\per\V}.
 
 \subsection{Rol del VCO en el Radar FMCW}
 
 En el sistema radar FMCW, el VCO cumple un rol fundamental: es el encargado de generar la señal de radiofrecuencia (RF) que será transmitida hacia el objetivo. Como se describió en el Capítulo \ref{chap:introduccion}, el principio de funcionamiento del radar FMCW se basa en transmitir una señal cuya frecuencia varía linealmente en el tiempo, conocida como señal \textit{chirp}. Esta señal permite determinar la distancia al objetivo mediante la diferencia de frecuencia entre la señal transmitida y la señal reflejada.
 
-El VCO permite generar la señal chirp de manera sencilla: al aplicar una tensión de control en forma de rampa, la frecuencia de salida del oscilador aumenta (o disminuye) linealmente en el tiempo. La pendiente del barrido de frecuencia $m$ (en $\text{Hz/s}$) determina directamente la resolución en distancia del radar, según la ecuación:
+El VCO permite generar la señal chirp de manera sencilla: al aplicar una tensión de control en forma de rampa, la frecuencia de salida del oscilador aumenta (o disminuye) linealmente en el tiempo. La pendiente del barrido de frecuencia $m$ (en \unit{\Hz\per\s}) determina directamente la resolución en distancia del radar, según la ecuación:
 
 \begin{equation}
 \Delta t = \frac{\Delta f}{m}
@@ -38,10 +38,10 @@ Es importante destacar que la función de transferencia de un VCO real no es per
 
 \subsection{Especificaciones del VCO para el Diseño}
 
-Para el presente diseño del radar FMCW con frecuencia de operación centrada en $1\,\text{GHz}$, el VCO debe cumplir con los siguientes requerimientos:
+Para el presente diseño del radar FMCW con frecuencia de operación centrada en \qty{1}{\GHz}, el VCO debe cumplir con los siguientes requerimientos:
 
 \begin{itemize}
-    \item \textbf{Rango de frecuencia:} El VCO debe ser capaz de oscilar en un rango que incluya la frecuencia central de $1\,\text{GHz}$. Para este diseño se adoptó un ancho de banda de barrido de $BW = 50\,\text{MHz}$, lo que resulta en una resolución en distancia de $\Delta R = \frac{c}{2 \cdot BW} = \frac{3 \times 10^8}{2 \times 50 \times 10^6} = 3\,\text{m}$.
+    \item \textbf{Rango de frecuencia:} El VCO debe ser capaz de oscilar en un rango que incluya la frecuencia central de \qty{1}{\GHz}. Para este diseño se adoptó un ancho de banda de barrido de $BW = \qty{50}{\MHz}$, lo que resulta en una resolución en distancia de $\Delta R = \frac{c}{2 \cdot BW} = \frac{\qty{3e8}{\m\per\s}}{2 \times \qty{50e6}{\Hz}} = \qty{3}{\m}$.
     
     \item \textbf{Sensibilidad (tuning range):} Debe presentar una sensibilidad adecuada para cubrir el ancho de banda de barrido deseado con el rango de tensiones de control disponible. La señal de control será generada por un conversor digital-analógico (DAC) controlado por un microcontrolador.
     
@@ -144,17 +144,17 @@ Los parámetros del modelo SPICE para el SMV1232 se resumen en la Tabla \ref{tab
 \toprule
 \textbf{Parámetro} & \textbf{Descripción} & \textbf{Valor} & \textbf{Unidad} \\
 \midrule
-CJO & Capacitancia de unión con polarización cero & 4.2 & pF \\
-VJ & Potencial de unión & 1.7 & V \\
-M & Coeficiente de gradación & 0.9 & -- \\
-CP & Capacitancia del encapsulado (paralelo) & 0 & pF \\
-RS & Resistencia en serie & 1.5 & $\Omega$ \\
-LS & Inductancia en serie & 1.7 & nH \\
+CJO & Capacitancia de unión con polarización cero & \num{4,2} & \unit{\pF} \\
+VJ & Potencial de unión & \num{1,7} & \unit{\V} \\
+M & Coeficiente de gradación & \num{0,9} & -- \\
+CP & Capacitancia del encapsulado (paralelo) & \num{0} & \unit{\pF} \\
+RS & Resistencia en serie & \num{1,5} & \unit{\ohm} \\
+LS & Inductancia en serie & \num{1,7} & \unit{\nH} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Para encontrar los valores óptimos de los componentes se configuraron los controladores de simulación tal como se muestra en la Figura \ref{fig:vco_optimization_controllers}, utilizando un análisis de \textit{Harmonic Balance}, un optimizador y dos objetivos a cumplir. El análisis de \textit{Harmonic Balance} está configurado en modo oscilador (\texttt{OscMode=yes}), con una frecuencia fundamental inicial de búsqueda de 1~GHz y un barrido de la variable $V_{\text{tune}}$ de 0~V a 3~V. Los capacitores $C_{\text{couple}}$ y $C_t$ se definen como variables optimizables. Se establecieron dos objetivos de optimización: la frecuencia mínima ($f_{\text{min}}$) al aplicar 0~V debe estar en el rango de 975~MHz a 975.5~MHz, y la frecuencia máxima ($f_{\text{max}}$) al aplicar 3~V debe ser mayor a 1.025~GHz. El optimizador utiliza un algoritmo de tipo aleatorio (\textit{Random}) con un máximo de 100 iteraciones.
+Para encontrar los valores óptimos de los componentes se configuraron los controladores de simulación tal como se muestra en la Figura \ref{fig:vco_optimization_controllers}, utilizando un análisis de \textit{Harmonic Balance}, un optimizador y dos objetivos a cumplir. El análisis de \textit{Harmonic Balance} está configurado en modo oscilador (\texttt{OscMode=yes}), con una frecuencia fundamental inicial de búsqueda de \qty{1}{\GHz} y un barrido de la variable $V_{\text{tune}}$ de \qty{0}{\V} a \qty{3}{\V}. Los capacitores $C_{\text{couple}}$ y $C_t$ se definen como variables optimizables. Se establecieron dos objetivos de optimización: la frecuencia mínima ($f_{\text{min}}$) al aplicar \qty{0}{\V} debe estar en el rango de \qty{975}{\MHz} a \qty{975,5}{\MHz}, y la frecuencia máxima ($f_{\text{max}}$) al aplicar \qty{3}{\V} debe ser mayor a \qty{1,025}{\GHz}. El optimizador utiliza un algoritmo de tipo aleatorio (\textit{Random}) con un máximo de 100 iteraciones.
 
 \begin{figure}[htbp]
 \centering
@@ -163,7 +163,7 @@ Para encontrar los valores óptimos de los componentes se configuraron los contr
 \label{fig:vco_optimization_controllers}
 \end{figure}
 
-Los resultados obtenidos fueron $C_{\text{couple}} = 2.82587$~pF y $C_t = 0.565855$~pF, adoptándose los valores comerciales de 2.9~pF y 0.55~pF para los análisis posteriores. En la Figura \ref{fig:vco_fosc_vtune} se puede observar el gráfico de $f_{\text{osc}}$ en función de la tensión de entrada $V_{\text{tune}}$.
+Los resultados obtenidos fueron $C_{\text{couple}} = \qty{2,82587}{\pF}$ y $C_t = \qty{0,565855}{\pF}$, adoptándose los valores comerciales de \qty{2,9}{\pF} y \qty{0,55}{\pF} para los análisis posteriores. En la Figura \ref{fig:vco_fosc_vtune} se puede observar el gráfico de $f_{\text{osc}}$ en función de la tensión de entrada $V_{\text{tune}}$.
 
 \begin{figure}[htbp]
 \centering
@@ -215,7 +215,7 @@ Los resultados obtenidos fueron $C_{\text{couple}} = 2.82587$~pF y $C_t = 0.5658
 \label{fig:vco_fosc_vtune}
 \end{figure}
 
-De la curva se comprueba que para generar la señal chirp de 50~MHz (de 975~MHz a 1025~MHz) a la salida del VCO, se necesita una señal de diente de sierra a la entrada que varíe aproximadamente de 0.035~V a 1.105~V. Una linealización de la curva en la región activa (0.6~V a 2.5~V) propone la siguiente ecuación de transferencia:
+De la curva se comprueba que para generar la señal chirp de \qty{50}{\MHz} (de \qty{975}{\MHz} a \qty{1025}{\MHz}) a la salida del VCO, se necesita una señal de diente de sierra a la entrada que varíe aproximadamente de \qty{0,035}{\V} a \qty{1,105}{\V}. Una linealización de la curva en la región activa (\qty{0,6}{\V} a \qty{2,5}{\V}) propone la siguiente ecuación de transferencia:
 
 \begin{equation}
 f(V_{\text{tune}}) = 67.89 \cdot V_{\text{tune}} + 948.89 \quad [\text{MHz}]
@@ -226,7 +226,7 @@ Se podría en una futura iteración del diseño ajustar el rango para que la var
 
 \subsection{Análisis de Estabilidad}
 
-Luego de obtener los valores correspondientes de los componentes, se procede a realizar un análisis de estabilidad utilizando la herramienta \texttt{OscTest} de ADS. Tomando como referencia el análisis realizado en el \textit{DesignGuide}, se obtiene el setup presentado en la Figura \ref{fig:vco_stability_analysis}. El análisis de estabilidad se realiza utilizando el criterio de Nyquist, donde la herramienta permite variar la impedancia de la sonda de prueba, manteniéndose en este caso en 50~$\Omega$.
+Luego de obtener los valores correspondientes de los componentes, se procede a realizar un análisis de estabilidad utilizando la herramienta \texttt{OscTest} de ADS. Tomando como referencia el análisis realizado en el \textit{DesignGuide}, se obtiene el setup presentado en la Figura \ref{fig:vco_stability_analysis}. El análisis de estabilidad se realiza utilizando el criterio de Nyquist, donde la herramienta permite variar la impedancia de la sonda de prueba, manteniéndose en este caso en \qty{50}{\ohm}.
 
 \begin{figure}[htbp]
 \centering
@@ -244,7 +244,7 @@ El criterio de Nyquist para osciladores basados en realimentación positiva esta
 \label{fig:vco_stability_results}
 \end{figure}
 
-La primera condición de arranque de oscilación requiere que la fase de $S_{11}$ sea de 0 grados a la frecuencia de oscilación. De los resultados se obtiene que a 1.132~GHz la fase es de aproximadamente 0.098 grados, cumpliendo esta condición. La segunda condición establece que la magnitud de $S_{11}$ debe ser mayor que 1; en este caso, la ganancia del lazo es de 5.866 (en veces), verificando así la condición de arranque.
+La primera condición de arranque de oscilación requiere que la fase de $S_{11}$ sea de \qty{0}{\degree} a la frecuencia de oscilación. De los resultados se obtiene que a \qty{1,132}{\GHz} la fase es de aproximadamente \qty{0,098}{\degree}, cumpliendo esta condición. La segunda condición establece que la magnitud de $S_{11}$ debe ser mayor que 1; en este caso, la ganancia del lazo es de 5.866 (en veces), verificando así la condición de arranque.
 
 Se puede concluir que el circuito oscilará correctamente y será capaz de sostener esta oscilación en el tiempo.
 
@@ -259,7 +259,7 @@ Se procede a analizar el espectro resultante junto con el nivel de potencia de s
 \label{fig:vco_power_analysis}
 \end{figure}
 
-En la Figura \ref{fig:vco_spectrum} se puede ver el resultado obtenido. Se obtuvo como componente fundamental $-0.635$~dBm en la frecuencia central de 1~GHz, lo cual es un nivel de potencia aceptable como entrada del amplificador de potencia. La segunda y tercera armónica tienen niveles de $-13.49$~dBm y $-26.29$~dBm respectivamente. La relación de potencia fundamental a segunda armónica es de 12.85~dBc, y a tercera armónica es de 25.65~dBc, valores aceptables para esta aplicación.
+En la Figura \ref{fig:vco_spectrum} se puede ver el resultado obtenido. Se obtuvo como componente fundamental \qty{-0,635}{\dBm} en la frecuencia central de \qty{1}{\GHz}, lo cual es un nivel de potencia aceptable como entrada del amplificador de potencia. La segunda y tercera armónica tienen niveles de \qty{-13,49}{\dBm} y \qty{-26,29}{\dBm} respectivamente. La relación de potencia fundamental a segunda armónica es de \qty{12,85}{\dBc}, y a tercera armónica es de \qty{25,65}{\dBc}, valores aceptables para esta aplicación.
 
 \begin{figure}[htbp]
 \centering
@@ -312,7 +312,7 @@ En la Figura \ref{fig:vco_spectrum} se puede ver el resultado obtenido. Se obtuv
 
 \subsection{Análisis de la Impedancia de Entrada del Núcleo}
 
-Se analiza el valor complejo de impedancia de entrada del núcleo (\textit{core}) del oscilador. En la Figura \ref{fig:vco_impedance_analysis} se puede observar el setup utilizado para simular este parámetro, donde se conecta un puerto de prueba al nodo superior del circuito y se realiza un barrido de parámetros S desde 0.5~GHz hasta 3~GHz.
+Se analiza el valor complejo de impedancia de entrada del núcleo (\textit{core}) del oscilador. En la Figura \ref{fig:vco_impedance_analysis} se puede observar el setup utilizado para simular este parámetro, donde se conecta un puerto de prueba al nodo superior del circuito y se realiza un barrido de parámetros S desde \qty{0,5}{\GHz} hasta \qty{3}{\GHz}.
 
 \begin{figure}[htbp]
 \centering
@@ -356,7 +356,7 @@ En la Figura \ref{fig:vco_real_zin} se muestra la parte real de la impedancia de
 \label{fig:vco_real_zin}
 \end{figure}
 
-A la frecuencia de interés (aproximadamente 1~GHz), la parte real de la impedancia es de $-69.0\ \Omega$. Este valor de resistencia negativa es robusto y significa que el oscilador podrá arrancar incluso si el tanque LC tiene pérdidas resistivas de hasta $69\ \Omega$. En diseño práctico se busca que $|R_{\text{neg}}|$ sea 2 o 3 veces mayor que la resistencia de carga para asegurar un arranque rápido y confiable.
+A la frecuencia de interés (aproximadamente \qty{1}{\GHz}), la parte real de la impedancia es de \qty{-69,0}{\ohm}. Este valor de resistencia negativa es robusto y significa que el oscilador podrá arrancar incluso si el tanque LC tiene pérdidas resistivas de hasta \qty{69}{\ohm}. En diseño práctico se busca que $|R_{\text{neg}}|$ sea 2 o 3 veces mayor que la resistencia de carga para asegurar un arranque rápido y confiable.
 
 \begin{figure}[htbp]
 \centering
@@ -391,13 +391,13 @@ A la frecuencia de interés (aproximadamente 1~GHz), la parte real de la impedan
 \label{fig:vco_imag_zin}
 \end{figure}
 
-La parte imaginaria a 1.005~GHz es de $-23.4\ \Omega$, lo que indica que el núcleo del oscilador tiene un comportamiento capacitivo a esta frecuencia. Para que el circuito resuene, el tanque resonante externo debe presentar una reactancia inductiva que cancele esta capacitancia, cumpliendo la condición de resonancia $\text{Im}(Z_{\text{total}}) = 0$.
+La parte imaginaria a \qty{1,005}{\GHz} es de \qty{-23,4}{\ohm}, lo que indica que el núcleo del oscilador tiene un comportamiento capacitivo a esta frecuencia. Para que el circuito resuene, el tanque resonante externo debe presentar una reactancia inductiva que cancele esta capacitancia, cumpliendo la condición de resonancia $\text{Im}(Z_{\text{total}}) = 0$.
 
-En resumen, a la frecuencia de operación de 1~GHz, el núcleo presenta una impedancia de entrada de $Z_{\text{in}} = -69.0 - j23.4\ \Omega$, confirmando que el circuito está correctamente polarizado y genera suficiente resistencia negativa para sostener las oscilaciones.
+En resumen, a la frecuencia de operación de \qty{1}{\GHz}, el núcleo presenta una impedancia de entrada de $Z_{\text{in}} = (-69{,}0 - j23{,}4)\,\unit{\ohm}$, confirmando que el circuito está correctamente polarizado y genera suficiente resistencia negativa para sostener las oscilaciones.
 
 \subsection{Período Transitorio y Estado Estacionario en el Dominio del Tiempo}
 
-Se analiza el transitorio y el estado del sistema luego del mismo, en el dominio del tiempo. En la Figura \ref{fig:vco_transient_analysis} se presenta el esquemático de la simulación, donde se configuran dos análisis transitorios: uno de 0 a 50~ns para observar el arranque, y otro de 990~ns a 1000~ns para verificar el estado estacionario.
+Se analiza el transitorio y el estado del sistema luego del mismo, en el dominio del tiempo. En la Figura \ref{fig:vco_transient_analysis} se presenta el esquemático de la simulación, donde se configuran dos análisis transitorios: uno de \qty{0}{\ns} a \qty{50}{\ns} para observar el arranque, y otro de \qty{990}{\ns} a \qty{1000}{\ns} para verificar el estado estacionario.
 
 \begin{figure}[htbp]
 \centering
@@ -406,7 +406,7 @@ Se analiza el transitorio y el estado del sistema luego del mismo, en el dominio
 \label{fig:vco_transient_analysis}
 \end{figure}
 
-En la Figura \ref{fig:vco_startup} se observa el período transitorio del oscilador. Durante los primeros 20~ns aproximadamente, el oscilador amplifica únicamente ruido térmico con amplitud infinitesimal. Entre 20~ns y 30~ns se produce un crecimiento exponencial de la oscilación, confirmando que la condición $|R_{\text{neg}}| > R_{\text{pérdidas}}$ se cumple correctamente. A partir de los 30~ns, la amplitud comienza a saturarse debido a las no linealidades del transistor. Se puede observar que el sistema alcanza el estado estacionario luego de aproximadamente 40 a 50~ns.
+En la Figura \ref{fig:vco_startup} se observa el período transitorio del oscilador. Durante los primeros \qty{20}{\ns} aproximadamente, el oscilador amplifica únicamente ruido térmico con amplitud infinitesimal. Entre \qty{20}{\ns} y \qty{30}{\ns} se produce un crecimiento exponencial de la oscilación, confirmando que la condición $|R_{\text{neg}}| > R_{\text{pérdidas}}$ se cumple correctamente. A partir de los \qty{30}{\ns}, la amplitud comienza a saturarse debido a las no linealidades del transistor. Se puede observar que el sistema alcanza el estado estacionario luego de aproximadamente \qty{40}{\ns} a \qty{50}{\ns}.
 
 \begin{figure}[htbp]
 \centering
@@ -436,7 +436,7 @@ En la Figura \ref{fig:vco_startup} se observa el período transitorio del oscila
 \label{fig:vco_startup}
 \end{figure}
 
-En la Figura \ref{fig:vco_steady_state} se observa el estado estacionario del sistema. Si bien el período coincide con el de una señal de 1~GHz (aproximadamente 10 ciclos en 10~ns), se nota una deformación en la señal: las crestas superiores son más redondeadas mientras que los picos inferiores son más agudos. Este es un comportamiento esperado en este tipo de osciladores de gran señal (\textit{Large Signal}). La tensión de salida varía aproximadamente de $-410$~mV a $+280$~mV, resultando en una amplitud pico a pico de aproximadamente 690~mV.
+En la Figura \ref{fig:vco_steady_state} se observa el estado estacionario del sistema. Si bien el período coincide con el de una señal de \qty{1}{\GHz} (aproximadamente 10 ciclos en \qty{10}{\ns}), se nota una deformación en la señal: las crestas superiores son más redondeadas mientras que los picos inferiores son más agudos. Este es un comportamiento esperado en este tipo de osciladores de gran señal (\textit{Large Signal}). La tensión de salida varía aproximadamente de \qty{-410}{\mV} a \qty{+280}{\mV}, resultando en una amplitud pico a pico de aproximadamente \qty{690}{\mV}.
 
 \begin{figure}[htbp]
 \centering
@@ -468,4 +468,4 @@ En la Figura \ref{fig:vco_steady_state} se observa el estado estacionario del si
 
 \section{Conclusiones}
 
-Se diseñó y simuló exitosamente un Oscilador Controlado por Tensión basado en la topología Clapp modificada en configuración colector común, operando a una frecuencia central de 1~GHz. El VCO cumple con los requerimientos establecidos: presenta un rango de sintonía de 50~MHz controlado mediante una tensión de entrada que varía de 0~V a 1.1~V, entrega una potencia de salida de $-0.6$~dBm en la componente fundamental, y demuestra un arranque robusto en aproximadamente 40~ns. Los análisis de estabilidad confirman que el circuito genera suficiente resistencia negativa para sostener las oscilaciones, y las simulaciones en el dominio del tiempo verifican el correcto funcionamiento del oscilador en estado estacionario.
+Se diseñó y simuló exitosamente un Oscilador Controlado por Tensión basado en la topología Clapp modificada en configuración colector común, operando a una frecuencia central de \qty{1}{\GHz}. El VCO cumple con los requerimientos establecidos: presenta un rango de sintonía de \qty{50}{\MHz} controlado mediante una tensión de entrada que varía de \qty{0}{\V} a \qty{1,1}{\V}, entrega una potencia de salida de \qty{-0,6}{\dBm} en la componente fundamental, y demuestra un arranque robusto en aproximadamente \qty{40}{\ns}. Los análisis de estabilidad confirman que el circuito genera suficiente resistencia negativa para sostener las oscilaciones, y las simulaciones en el dominio del tiempo verifican el correcto funcionamiento del oscilador en estado estacionario.
