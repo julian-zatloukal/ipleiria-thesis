@@ -1015,6 +1015,186 @@ THD                       & \num{0,27}   & \unit{\percent} \\
 
 Este análisis espectral marca el fin de la síntesis del circuito. El diseño ha evolucionado desde la nota de aplicación de referencia hasta un amplificador personalizado y optimizado para \qty{1}{\GHz}, con parámetros de polarización precisos y rendimiento validado.
 
+\subsection{Análisis en el Dominio Temporal: Formas de Onda de Colector, Fuente y Carga}
+
+En este apartado se analizan las formas de onda en el transitorio del amplificador y en el estado estacionario. Para el transitorio, en la Figura \ref{fig:pa_transient_waveforms} se pueden ver del lado izquierdo las formas de onda de tensión para colector, fuente y carga, y del lado derecho la forma de onda de corriente. Por otro lado, en la Figura \ref{fig:pa_steady_state_waveforms} se muestra de la misma manera las formas de onda luego del transitorio, en estado estacionario.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[
+    group style={
+        group size=2 by 3,
+        horizontal sep=1.5cm,
+        vertical sep=2.2cm,
+    },
+    width=0.48\textwidth,
+    height=4cm,
+    grid=both,
+    grid style={line width=.1pt, draw=gray!30},
+    major grid style={line width=.2pt, draw=gray!50},
+    tick label style={font=\scriptsize},
+    label style={font=\small},
+    xlabel={Tiempo [ns]},
+]
+
+% Vc - Tensión de colector
+\nextgroupplot[
+    ylabel={$V_C$ [V]},
+    xmin=0, xmax=40,
+    ymin=0, ymax=12,
+    title style={font=\small\bfseries},
+    title={Tensión de Colector},
+]
+\addplot[red, thick, no markers] table[x expr=\thisrowno{0}*1e9, y expr=\thisrowno{1}, col sep=tab] {Datasets/2_PA/transient_parsed/tran1_vc.dat};
+
+% I_c - Corriente de colector
+\nextgroupplot[
+    ylabel={$I_C$ [mA]},
+    xmin=0, xmax=40,
+    ymin=-30, ymax=150,
+    title style={font=\small\bfseries},
+    title={Corriente de Colector},
+]
+\addplot[blue, thick, no markers] table[x expr=\thisrowno{0}*1e9, y expr=\thisrowno{1}*1000, col sep=tab] {Datasets/2_PA/transient_parsed/tran1_i_c_i.dat};
+
+% Vcc - Tensión de fuente
+\nextgroupplot[
+    ylabel={$V_{CC}$ [V]},
+    xmin=0, xmax=40,
+    ymin=7.9, ymax=8.1,
+    title style={font=\small\bfseries},
+    title={Tensión de Fuente},
+]
+\addplot[red, thick, no markers] table[x expr=\thisrowno{0}*1e9, y expr=\thisrowno{1}, col sep=tab] {Datasets/2_PA/transient_parsed/tran1_vcc.dat};
+
+% I_dc - Corriente de fuente DC
+\nextgroupplot[
+    ylabel={$I_{DC}$ [mA]},
+    xmin=0, xmax=40,
+    ymin=-30, ymax=150,
+    title style={font=\small\bfseries},
+    title={Corriente de Fuente DC},
+]
+\addplot[blue, thick, no markers] table[x expr=\thisrowno{0}*1e9, y expr=\thisrowno{1}*1000, col sep=tab] {Datasets/2_PA/transient_parsed/tran1_i_dc_i.dat};
+
+% Vrl - Tensión en carga
+\nextgroupplot[
+    ylabel={$V_{RL}$ [V]},
+    xmin=0, xmax=40,
+    ymin=-1.5, ymax=1.5,
+    title style={font=\small\bfseries},
+    title={Tensión en Carga},
+]
+\addplot[red, thick, no markers] table[x expr=\thisrowno{0}*1e9, y expr=\thisrowno{1}, col sep=tab] {Datasets/2_PA/transient_parsed/tran1_vrl.dat};
+
+% I_rl - Corriente en carga
+\nextgroupplot[
+    ylabel={$I_{RL}$ [mA]},
+    xmin=0, xmax=40,
+    ymin=-30, ymax=30,
+    title style={font=\small\bfseries},
+    title={Corriente en Carga},
+]
+\addplot[blue, thick, no markers] table[x expr=\thisrowno{0}*1e9, y expr=\thisrowno{1}*1000, col sep=tab] {Datasets/2_PA/transient_parsed/tran1_i_rl_i.dat};
+
+\end{groupplot}
+\end{tikzpicture}
+\captionsetup{justification=centering}
+\caption{Formas de onda durante el transitorio del PA (0 a 40 ns). \\ Izquierda: tensiones. Derecha: corrientes.}
+\label{fig:pa_transient_waveforms}
+\end{figure}
+
+Durante el transitorio se observa cómo las señales evolucionan desde el estado inicial hasta alcanzar el régimen estacionario. La tensión de colector $V_C$ oscila entre \qty{0}{\V} y \qty{11,3}{\V} con una excursión máxima de aproximadamente \qty{11,3}{\V}. La corriente de colector $I_C$ varía entre \qty{-19,8}{\mA} y \qty{145,9}{\mA}, mostrando los picos característicos del arranque del amplificador. La tensión de fuente $V_{CC}$ se mantiene constante en \qty{8}{\V}, mientras que la tensión en la carga $V_{RL}$ presenta una oscilación de \qty{2,4}{\V} pico a pico.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[
+    group style={
+        group size=2 by 3,
+        horizontal sep=1.5cm,
+        vertical sep=2.2cm,
+    },
+    width=0.48\textwidth,
+    height=4cm,
+    grid=both,
+    grid style={line width=.1pt, draw=gray!30},
+    major grid style={line width=.2pt, draw=gray!50},
+    tick label style={font=\scriptsize},
+    label style={font=\small},
+    xlabel={Tiempo [ns]},
+]
+
+% Vc - Tensión de colector (estado estacionario)
+\nextgroupplot[
+    ylabel={$V_C$ [V]},
+    xmin=0, xmax=4,
+    ymin=4, ymax=12,
+    title style={font=\small\bfseries},
+    title={Tensión de Colector},
+]
+\addplot[red, thick, no markers] table[x expr=(\thisrowno{0}-1e-6)*1e9, y expr=\thisrowno{1}, col sep=tab] {Datasets/2_PA/transient_parsed/tran2_vc.dat};
+
+% I_c - Corriente de colector (estado estacionario)
+\nextgroupplot[
+    ylabel={$I_C$ [mA]},
+    xmin=0, xmax=4,
+    ymin=-10, ymax=70,
+    title style={font=\small\bfseries},
+    title={Corriente de Colector},
+]
+\addplot[blue, thick, no markers] table[x expr=(\thisrowno{0}-1e-6)*1e9, y expr=\thisrowno{1}*1000, col sep=tab] {Datasets/2_PA/transient_parsed/tran2_i_c_i.dat};
+
+% Vcc - Tensión de fuente (estado estacionario)
+\nextgroupplot[
+    ylabel={$V_{CC}$ [V]},
+    xmin=0, xmax=4,
+    ymin=7.9, ymax=8.1,
+    title style={font=\small\bfseries},
+    title={Tensión de Fuente},
+]
+\addplot[red, thick, no markers] table[x expr=(\thisrowno{0}-1e-6)*1e9, y expr=\thisrowno{1}, col sep=tab] {Datasets/2_PA/transient_parsed/tran2_vcc.dat};
+
+% I_dc - Corriente de fuente DC (estado estacionario)
+\nextgroupplot[
+    ylabel={$I_{DC}$ [mA]},
+    xmin=0, xmax=4,
+    ymin=-10, ymax=70,
+    title style={font=\small\bfseries},
+    title={Corriente de Fuente DC},
+]
+\addplot[blue, thick, no markers] table[x expr=(\thisrowno{0}-1e-6)*1e9, y expr=\thisrowno{1}*1000, col sep=tab] {Datasets/2_PA/transient_parsed/tran2_i_dc_i.dat};
+
+% Espacio vacío para Vrl (no disponible en tran2)
+\nextgroupplot[
+    ylabel={$V_{RL}$ [V]},
+    xmin=0, xmax=4,
+    ymin=-1.5, ymax=1.5,
+    title style={font=\small\bfseries},
+    title={Tensión en Carga},
+]
+\addplot[red, thick, no markers] table[x expr=(\thisrowno{0}-1e-6)*1e9, y expr=\thisrowno{1}, col sep=tab] {Datasets/2_PA/transient_parsed/tran2_vrl.dat};
+
+% I_rl - Corriente en carga (estado estacionario)
+\nextgroupplot[
+    ylabel={$I_{RL}$ [mA]},
+    xmin=0, xmax=4,
+    ymin=-30, ymax=30,
+    title style={font=\small\bfseries},
+    title={Corriente en Carga},
+]
+\addplot[blue, thick, no markers] table[x expr=(\thisrowno{0}-1e-6)*1e9, y expr=\thisrowno{1}*1000, col sep=tab] {Datasets/2_PA/transient_parsed/tran2_i_rl_i.dat};
+
+\end{groupplot}
+\end{tikzpicture}
+\captionsetup{justification=centering}
+\caption{Formas de onda en estado estacionario del PA (4 períodos a 1 GHz). \\ Izquierda: tensiones. Derecha: corrientes.}
+\label{fig:pa_steady_state_waveforms}
+\end{figure}
+
+En estado estacionario, las formas de onda presentan un comportamiento periódico estable. La tensión de colector $V_C$ oscila entre \qty{4,7}{\V} y \qty{11,3}{\V}, mostrando una excursión pico a pico de aproximadamente \qty{6,5}{\V} centrada alrededor de $V_{CC} = \qty{8}{\V}$. La corriente de colector $I_C$ varía entre \qty{-4,4}{\mA} y \qty{60,5}{\mA}, confirmando la operación en Clase AB donde el dispositivo conduce durante más de medio ciclo pero no de forma continua. La corriente en la carga $I_{RL}$ presenta una forma de onda sinusoidal simétrica con una amplitud de aproximadamente \qty{22}{\mA} pico, correspondiente a la potencia de salida esperada sobre la carga de \qty{50}{\ohm}.
+
 \section{Conclusiones}
 
 Contenido pendiente.

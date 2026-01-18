@@ -173,6 +173,7 @@
 \RequirePackage{pgfplots} % Create publication-quality plots.
 \RequirePackage{pgfplotstable} % Load data from external files.
 \pgfplotsset{compat=1.18} % Use modern pgfplots features.
+\usepgfplotslibrary{groupplots} % Enable groupplot environment.
 \RequirePackage{circuitikz} % Circuit diagrams with TikZ.
 \RequirePackage{siunitx} % SI units formatting.
 \sisetup{

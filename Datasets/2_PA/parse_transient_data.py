@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Script to parse data_pa_transient_all.dat into separate dataset files.
+Script to parse transient data files (voltage and current) into separate dataset files.
 Creates a subfolder 'transient_parsed' and splits the data by each dataset header.
 """
 
@@ -10,7 +10,7 @@ from pathlib import Path
 
 def parse_transient_data(input_file: str, output_dir: str) -> dict:
     """
-    Parse the combined transient data file and split into individual dataset files.
+    Parse a combined transient data file and split into individual dataset files.
     
     Args:
         input_file: Path to the input data file
@@ -83,32 +83,47 @@ def save_dataset(output_dir: str, name: str, lines: list) -> str:
 def main():
     # Define paths
     script_dir = Path(__file__).parent
-    input_file = script_dir / "data_pa_transient_all.dat"
     output_dir = script_dir / "transient_parsed"
+    
+    # Input files: separate voltage and current files
+    voltage_file = script_dir / "data_pa_transient_voltage.dat"
+    current_file = script_dir / "data_pa_transient_current.dat"
     
     print("=" * 60)
     print("Transient Data Parser")
     print("=" * 60)
-    print(f"\nInput file: {input_file}")
+    print(f"\nVoltage file: {voltage_file}")
+    print(f"Current file: {current_file}")
     print(f"Output directory: {output_dir}\n")
     
-    if not input_file.exists():
-        print(f"Error: Input file not found: {input_file}")
-        return 1
+    all_datasets = {}
     
-    print("Parsing datasets...\n")
-    datasets = parse_transient_data(str(input_file), str(output_dir))
+    # Parse voltage file
+    if voltage_file.exists():
+        print("Parsing voltage datasets...\n")
+        voltage_datasets = parse_transient_data(str(voltage_file), str(output_dir))
+        all_datasets.update(voltage_datasets)
+    else:
+        print(f"Warning: Voltage file not found: {voltage_file}")
+    
+    # Parse current file
+    if current_file.exists():
+        print("\nParsing current datasets...\n")
+        current_datasets = parse_transient_data(str(current_file), str(output_dir))
+        all_datasets.update(current_datasets)
+    else:
+        print(f"Warning: Current file not found: {current_file}")
     
     print("\n" + "=" * 60)
     print("Summary")
     print("=" * 60)
-    print(f"\nTotal datasets extracted: {len(datasets)}")
-    print(f"Total data points: {sum(datasets.values())}")
+    print(f"\nTotal datasets extracted: {len(all_datasets)}")
+    print(f"Total data points: {sum(all_datasets.values())}")
     print(f"\nDatasets:")
     
     # Group by type
-    voltage_datasets = {k: v for k, v in datasets.items() if 'V' in k and 'I_' not in k}
-    current_datasets = {k: v for k, v in datasets.items() if 'I_' in k}
+    voltage_datasets = {k: v for k, v in all_datasets.items() if 'V' in k and 'I_' not in k}
+    current_datasets = {k: v for k, v in all_datasets.items() if 'I_' in k or 'i' in k.lower()}
     
     print("\n  Voltage signals:")
     for name, count in voltage_datasets.items():
