@@ -639,6 +639,258 @@ En este punto, el diseño del amplificador está prácticamente completo en el s
     \item \textbf{Ganancia:} Aproximadamente \qty{11,6}{\dB} a la frecuencia central, cercano al objetivo de \qty{12}{\dB}.
 \end{enumerate}
 
+\subsection{Análisis de Estabilidad e Inconvenientes Encontrados}
+
+Al realizar el análisis de tensión de salida en el dominio temporal se encontró que la señal de salida tenía una componente de muy alta frecuencia montada por encima de la misma, la cual se observa en la Figura \ref{fig:pa_transient_unstab}. La señal parásita es de alrededor de \qty{10}{\GHz}; al comprobarse que no es un armónico de la señal original, se procede a analizar la estabilidad del amplificador.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=0.9\textwidth,
+    height=6cm,
+    xlabel={Tiempo [ns]},
+    ylabel={$V_{out}$ [V]},
+    xmin=0, xmax=4,
+    ymin=-1, ymax=1,
+    grid=both,
+    grid style={line width=.1pt, draw=gray!30},
+    major grid style={line width=.2pt,draw=gray!50},
+    tick label style={font=\footnotesize},
+    label style={font=\small},
+]
+\addplot[red, thick] table[
+    x expr=(\thisrowno{0}-1e-6)*1e9,
+    y expr=\thisrowno{1},
+    col sep=tab,
+    skip first n=1
+] {Datasets/2_PA/data_pa_transient_unstab.dat};
+\end{axis}
+\end{tikzpicture}
+\captionsetup{justification=centering}
+\caption{Tensión de salida en el dominio temporal mostrando \\ la oscilación parásita de alta frecuencia.}
+\label{fig:pa_transient_unstab}
+\end{figure}
+
+En la Figura \ref{fig:pa_stab_fact_unstab} se muestra el factor de estabilidad $K$ del sistema. Es evidente que en alrededor de los \qty{10}{\GHz} hay un valle en la curva donde el factor es de aproximadamente $K \approx 0{,}66$, bastante menor que 1, lo cual confirma la sospecha de inestabilidad. También se observa inestabilidad en baja frecuencia (\textit{motorboating}), con valores de $K$ por debajo de 1 en el rango de \qty{2}{\MHz} a \qty{100}{\MHz}, fenómeno del cual la hoja de datos nos advierte.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=0.9\textwidth,
+    height=6cm,
+    xlabel={Frecuencia [GHz]},
+    ylabel={Factor de Estabilidad $K$},
+    xmin=0, xmax=15,
+    ymin=0.3, ymax=1.6,
+    grid=both,
+    grid style={line width=.1pt, draw=gray!30},
+    major grid style={line width=.2pt,draw=gray!50},
+    tick label style={font=\footnotesize},
+    label style={font=\small},
+]
+\addplot[red, thick, each nth point=100, filter discard warning=false, unbounded coords=discard] table[
+    x expr=\thisrowno{0}/1e9,
+    y index=1,
+    col sep=tab,
+    skip first n=1
+] {Datasets/2_PA/data_pa_stab_fact_unstab.dat};
+
+% Línea de referencia K=1
+\addplot[black, dashed, line width=0.8pt] coordinates {(0,1) (15,1)};
+\node[anchor=south west, font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:0.2,1.05) {$K = 1$};
+
+\end{axis}
+\end{tikzpicture}
+\captionsetup{justification=centering}
+\caption{Factor de estabilidad $K$ del PA antes de la estabilización, \\ mostrando regiones de inestabilidad ($K < 1$).}
+\label{fig:pa_stab_fact_unstab}
+\end{figure}
+
+La inestabilidad en este caso pudo haber sido causada por la maximización de la ganancia como único criterio de optimización, llevando al amplificador a un punto crítico. Cabe aclarar que no se puede saber con certeza si en un circuito real este fenómeno estará presente, debido a las pérdidas del dieléctrico de la placa y componentes parásitos.
+
+La inestabilidad en baja frecuencia se puede mitigar al asignarle resistencias parásitas a todos los inductores, tomando como referencia inductores de RF de la marca Murata. En el caso de alta frecuencia, se opta por añadir una resistencia en derivación en la base del transistor, lo cual disminuirá la ganancia del sistema y asegurará estabilidad en todo el rango. Para encontrar el valor de esta resistencia se opta nuevamente por utilizar el optimizador, el cual tras un breve análisis arroja un valor de:
+
+\begin{equation}
+\boxed{R_{estab} = \qty{695}{\ohm}}
+\end{equation}
+
+Se repiten los análisis de estabilidad y se trazan nuevamente las curvas de parámetros S. La Figura \ref{fig:pa_stab_fact_stab} muestra el factor de estabilidad después de aplicar las correcciones, donde se observa que $K > 1$ en todo el rango de frecuencias analizado.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=0.9\textwidth,
+    height=6cm,
+    xlabel={Frecuencia [GHz]},
+    ylabel={Factor de Estabilidad $K$},
+    xmin=0, xmax=15,
+    ymin=0, ymax=4,
+    grid=both,
+    grid style={line width=.1pt, draw=gray!30},
+    major grid style={line width=.2pt,draw=gray!50},
+    tick label style={font=\footnotesize},
+    label style={font=\small},
+]
+\addplot[red, thick, each nth point=100, filter discard warning=false, unbounded coords=discard, restrict y to domain=0:4] table[
+    x expr=\thisrowno{0}/1e9,
+    y index=1,
+    col sep=tab,
+    skip first n=1
+] {Datasets/2_PA/data_pa_stab_fact_stab.dat};
+
+% Línea de referencia K=1
+\addplot[black, dashed, line width=0.8pt] coordinates {(0,1) (15,1)};
+\node[anchor=south west, font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:0.2,1.1) {$K = 1$};
+
+\end{axis}
+\end{tikzpicture}
+\captionsetup{justification=centering}
+\caption{Factor de estabilidad $K$ del PA después de la estabilización, \\ mostrando $K > 1$ en todo el rango de frecuencias.}
+\label{fig:pa_stab_fact_stab}
+\end{figure}
+
+La Figura \ref{fig:pa_sparams_stabilized} presenta los parámetros S del amplificador estabilizado. Se observa que la ganancia disminuye modestamente de \qty{11,6}{\dB} a aproximadamente \qty{10,97}{\dB} a la frecuencia central de \qty{1}{\GHz}, un compromiso aceptable para garantizar la estabilidad del sistema.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+% Subplot (a) - S11
+\begin{axis}[
+    name=plot1,
+    width=0.48\textwidth,
+    height=5.5cm,
+    xlabel={Frecuencia [GHz]},
+    ylabel={$S_{11}$ [dB]},
+    xmin=0.5, xmax=1.5,
+    ymin=-30, ymax=0,
+    grid=both,
+    grid style={line width=.1pt, draw=gray!30},
+    major grid style={line width=.2pt,draw=gray!50},
+    tick label style={font=\footnotesize},
+    label style={font=\small},
+    title={\footnotesize (a) $S_{11}$},
+]
+\addplot[red, thick] table[
+    x expr=\thisrowno{0}/1e9,
+    y expr=\thisrowno{1},
+    col sep=tab,
+    skip first n=1
+] {Datasets/2_PA/data_pa_s_parameters_s11_stabilized.dat};
+
+\addplot[black, dashed, line width=0.6pt] coordinates {(0.5,-10) (1.5,-10)};
+\addplot[black, dashed, line width=0.6pt] coordinates {(0.5,-20) (1.5,-20)};
+\end{axis}
+
+% Subplot (b) - S21
+\begin{axis}[
+    name=plot2,
+    at={($(plot1.east)+(1.8cm,0)$)},
+    anchor=west,
+    width=0.48\textwidth,
+    height=5.5cm,
+    xlabel={Frecuencia [GHz]},
+    ylabel={$S_{21}$ [dB]},
+    xmin=0.5, xmax=1.5,
+    ymin=0, ymax=12,
+    grid=both,
+    grid style={line width=.1pt, draw=gray!30},
+    major grid style={line width=.2pt,draw=gray!50},
+    tick label style={font=\footnotesize},
+    label style={font=\small},
+    title={\footnotesize (b) $S_{21}$},
+]
+\addplot[red, thick] table[
+    x expr=\thisrowno{0}/1e9,
+    y expr=\thisrowno{1},
+    col sep=tab,
+    skip first n=1
+] {Datasets/2_PA/data_pa_s_parameters_s21_stabilized.dat};
+
+\addplot[black, dashed, line width=0.6pt] coordinates {(0.5,10) (1.5,10)};
+\end{axis}
+
+% Subplot (c) - S12
+\begin{axis}[
+    name=plot3,
+    at={($(plot1.south)-(0,2.0cm)$)},
+    anchor=north,
+    width=0.48\textwidth,
+    height=5.5cm,
+    xlabel={Frecuencia [GHz]},
+    ylabel={$S_{12}$ [dB]},
+    xmin=0.5, xmax=1.5,
+    ymin=-25, ymax=-10,
+    grid=both,
+    grid style={line width=.1pt, draw=gray!30},
+    major grid style={line width=.2pt,draw=gray!50},
+    tick label style={font=\footnotesize},
+    label style={font=\small},
+    title={\footnotesize (c) $S_{12}$},
+]
+\addplot[red, thick] table[
+    x expr=\thisrowno{0}/1e9,
+    y expr=\thisrowno{1},
+    col sep=tab,
+    skip first n=1
+] {Datasets/2_PA/data_pa_s_parameters_s12_stabilized.dat};
+\end{axis}
+
+% Subplot (d) - S22
+\begin{axis}[
+    name=plot4,
+    at={($(plot3.east)+(1.8cm,0)$)},
+    anchor=west,
+    width=0.48\textwidth,
+    height=5.5cm,
+    xlabel={Frecuencia [GHz]},
+    ylabel={$S_{22}$ [dB]},
+    xmin=0.5, xmax=1.5,
+    ymin=-25, ymax=0,
+    grid=both,
+    grid style={line width=.1pt, draw=gray!30},
+    major grid style={line width=.2pt,draw=gray!50},
+    tick label style={font=\footnotesize},
+    label style={font=\small},
+    title={\footnotesize (d) $S_{22}$},
+]
+\addplot[red, thick] table[
+    x expr=\thisrowno{0}/1e9,
+    y expr=\thisrowno{1},
+    col sep=tab,
+    skip first n=1
+] {Datasets/2_PA/data_pa_s_parameters_s22_stabilized.dat};
+
+\addplot[black, dashed, line width=0.6pt] coordinates {(0.5,-10) (1.5,-10)};
+\end{axis}
+\end{tikzpicture}
+\captionsetup{justification=centering}
+\caption{Parámetros S del PA estabilizado: (a) $S_{11}$, (b) $S_{21}$, \\ (c) $S_{12}$, (d) $S_{22}$.}
+\label{fig:pa_sparams_stabilized}
+\end{figure}
+
+La Tabla \ref{tab:pa_stabilized_summary} resume los parámetros del amplificador después de la estabilización.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Resumen de parámetros del PA estabilizado a \qty{1}{\GHz}.}
+\label{tab:pa_stabilized_summary}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Parámetro} & \textbf{Valor} & \textbf{Unidad} \\
+\midrule
+$S_{11}$          & $< \num{-24,8}$ & \unit{\dB} \\
+$S_{21}$          & \num{10,97}     & \unit{\dB} \\
+$S_{12}$          & \num{-12,7}     & \unit{\dB} \\
+$S_{22}$          & \num{-17,1}     & \unit{\dB} \\
+$R_{estab}$       & \num{695}       & \unit{\ohm} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \subsection{Análisis de Espectro de Salida}
 
 Una vez completadas las fases de optimización, se procede a validar el rendimiento final del amplificador mediante un análisis espectral. Este análisis permite verificar la pureza de la señal de salida y cuantificar la distorsión armónica generada por el amplificador en condiciones de operación.
@@ -681,18 +933,18 @@ La Figura \ref{fig:pa_output_spectrum} presenta el espectro de potencia a la sal
     label style={font=\small},
 ]
 % Componentes espectrales como flechas desde el fondo
-\draw[-stealth, blue!80, line width=1.5pt] (axis cs:1,-100) -- (axis cs:1,11.61);
-\draw[-stealth, blue!80, line width=1.5pt] (axis cs:2,-100) -- (axis cs:2,-36.28);
-\draw[-stealth, blue!80, line width=1.5pt] (axis cs:3,-100) -- (axis cs:3,-56.58);
-\draw[-stealth, blue!80, line width=1.5pt] (axis cs:4,-100) -- (axis cs:4,-72.85);
-\draw[-stealth, blue!80, line width=1.5pt] (axis cs:5,-100) -- (axis cs:5,-86.91);
+\draw[-stealth, red!80, line width=1.5pt] (axis cs:1,-100) -- (axis cs:1,10.97);
+\draw[-stealth, red!80, line width=1.5pt] (axis cs:2,-100) -- (axis cs:2,-40.29);
+\draw[-stealth, red!80, line width=1.5pt] (axis cs:3,-100) -- (axis cs:3,-61.43);
+\draw[-stealth, red!80, line width=1.5pt] (axis cs:4,-100) -- (axis cs:4,-81.07);
+\draw[-stealth, red!80, line width=1.5pt] (axis cs:5,-100) -- (axis cs:5,-96.74);
 
-% Etiquetas de valores
-\node[above, font=\scriptsize] at (axis cs:1,11.61) {11.6 dBm};
-\node[above, font=\scriptsize] at (axis cs:2,-36.28) {-36.3};
-\node[above, font=\scriptsize] at (axis cs:3,-56.58) {-56.6};
-\node[above, font=\scriptsize] at (axis cs:4,-72.85) {-72.9};
-\node[above, font=\scriptsize] at (axis cs:5,-86.91) {-86.9};
+% Etiquetas de valores con fondo blanco
+\node[above, font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:1,10.97) {11,0 dBm};
+\node[above, font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:2,-40.29) {-40,3};
+\node[above, font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:3,-61.43) {-61,4};
+\node[above, font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:4,-81.07) {-81,1};
+\node[above, font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:5,-96.74) {-96,7};
 
 \end{axis}
 \end{tikzpicture}
@@ -704,10 +956,10 @@ La Figura \ref{fig:pa_output_spectrum} presenta el espectro de potencia a la sal
 Los resultados muestran:
 
 \begin{itemize}
-    \item \textbf{Fundamental (\qty{1}{\GHz}):} $P_{out} = \qty{11,61}{\dBm}$, correspondiente a una ganancia de \qty{11,61}{\dB} para una entrada de \qty{0}{\dBm}.
-    \item \textbf{Segundo armónico (\qty{2}{\GHz}):} \qty{-36,28}{\dBm}, aproximadamente \qty{48}{\dB} por debajo del fundamental.
-    \item \textbf{Tercer armónico (\qty{3}{\GHz}):} \qty{-56,58}{\dBm}, aproximadamente \qty{68}{\dB} por debajo del fundamental.
-    \item \textbf{Armónicos superiores:} Por debajo de \qty{-70}{\dBm}, despreciables.
+    \item \textbf{Fundamental (\qty{1}{\GHz}):} $P_{out} = \qty{10,97}{\dBm}$, correspondiente a una ganancia de \qty{10,97}{\dB} para una entrada de \qty{0}{\dBm}.
+    \item \textbf{Segundo armónico (\qty{2}{\GHz}):} \qty{-40,29}{\dBm}, aproximadamente \qty{51}{\dB} por debajo del fundamental.
+    \item \textbf{Tercer armónico (\qty{3}{\GHz}):} \qty{-61,43}{\dBm}, aproximadamente \qty{72}{\dB} por debajo del fundamental.
+    \item \textbf{Armónicos superiores:} Por debajo de \qty{-80}{\dBm}, despreciables.
 \end{itemize}
 
 \subsubsection{Distorsión Armónica Total (THD)}
@@ -721,20 +973,20 @@ THD = \sqrt{\frac{P_2 + P_3 + P_4 + P_5}{P_1}} \times 100\%
 Convirtiendo los valores de dBm a potencia lineal:
 
 \begin{align}
-P_1 &= 10^{11{,}61/10} = \qty{14,49}{\mW} \nonumber \\
-P_2 &= 10^{-36{,}28/10} = \qty{2,36e-4}{\mW} \nonumber \\
-P_3 &= 10^{-56{,}58/10} = \qty{2,20e-6}{\mW} \nonumber \\
-P_4 &= 10^{-72{,}85/10} = \qty{5,19e-8}{\mW} \nonumber \\
-P_5 &= 10^{-86{,}91/10} = \qty{2,04e-9}{\mW}
+P_1 &= 10^{10{,}97/10} = \qty{12,50}{\mW} \nonumber \\
+P_2 &= 10^{-40{,}29/10} = \qty{9,35e-5}{\mW} \nonumber \\
+P_3 &= 10^{-61{,}43/10} = \qty{7,19e-7}{\mW} \nonumber \\
+P_4 &= 10^{-81{,}07/10} = \qty{7,81e-9}{\mW} \nonumber \\
+P_5 &= 10^{-96{,}74/10} = \qty{2,12e-10}{\mW}
 \end{align}
 
 Sustituyendo en la ecuación:
 
 \begin{equation}
-THD = \sqrt{\frac{2.36 \times 10^{-4}}{14.49}} \times 100\% \approx \mathbf{0.40\%}
+THD = \sqrt{\frac{9.35 \times 10^{-5}}{12.50}} \times 100\% \approx \mathbf{0.27\%}
 \end{equation}
 
-Este valor de THD es equivalente a aproximadamente \qty{-48}{\dB} respecto al fundamental, lo cual es aceptable para aplicaciones de radar donde la pureza espectral moderada es suficiente.
+Este valor de THD es equivalente a aproximadamente \qty{-51}{\dB} respecto al fundamental, lo cual es aceptable para aplicaciones de radar donde la pureza espectral moderada es suficiente.
 
 \subsubsection{Resumen del Rendimiento Final}
 
@@ -751,12 +1003,12 @@ La Tabla \ref{tab:pa_performance_summary} resume las características de rendimi
 \midrule
 Frecuencia central        & \num{1,0}    & \unit{\GHz} \\
 Potencia de entrada       & \num{0}      & \unit{\dBm} \\
-Potencia de salida        & \num{11,61}  & \unit{\dBm} \\
-Ganancia                  & \num{11,61}  & \unit{\dB} \\
+Potencia de salida        & \num{10,97}  & \unit{\dBm} \\
+Ganancia                  & \num{10,97}  & \unit{\dB} \\
 $S_{11}$ @ \qty{1}{\GHz}          & $< \num{-25}$ & \unit{\dB} \\
 $S_{22}$ @ \qty{1}{\GHz}          & $< \num{-16}$ & \unit{\dB} \\
-THD                       & \num{0,40}   & \unit{\percent} \\
-2do Armónico (supresión)  & $\num{-48}$  & \unit{\dBc} \\
+THD                       & \num{0,27}   & \unit{\percent} \\
+2do Armónico (supresión)  & $\num{-51}$  & \unit{\dBc} \\
 \bottomrule
 \end{tabular}
 \end{table}
