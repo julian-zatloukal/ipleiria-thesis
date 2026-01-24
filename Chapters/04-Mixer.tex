@@ -5,12 +5,338 @@ Este capítulo presenta el diseño y simulación del Mezclador Simple Balanceado
 
 \section{Introducción Teórica}
 
-Contenido pendiente.
-lalala2222
+Un mezclador de radiofrecuencia es un bloque esencial en los sistemas de comunicaciones y radar, cuya función principal es realizar la conversión de frecuencia de una señal mediante un proceso de multiplicación no lineal. En particular, en un radar FMCW, el mezclador permite obtener una señal de baja frecuencia que contiene la información del retardo entre la señal transmitida y la señal reflejada por el blanco, lo que posibilita la determinación de la distancia al objetivo.
+
+El principio de funcionamiento del mezclador se basa en la combinación de la señal de RF recibida con una señal proveniente del oscilador local (LO), generando componentes espectrales en las frecuencias suma y diferencia. La componente de diferencia, denominada frecuencia intermedia (IF), es la de interés para el procesamiento posterior.
+
+\subsection{Rol del Mezclador en el Radar FMCW }
+
+En un radar FMCW, la frecuencia de la señal transmitida varía de manera continua en el tiempo siguiendo una rampa lineal. La señal reflejada por el blanco presenta un retardo temporal proporcional a la distancia recorrida. Al mezclar dicha señal reflejada con una copia de la señal transmitida (LO), se obtiene una señal IF cuya frecuencia es proporcional a dicho retardo.
+
+De este modo, el mezclador cumple la función de traducir la información de distancia, originalmente codificada en una diferencia temporal, a una señal de baja frecuencia fácilmente procesable mediante técnicas digitales o analógicas.
+
+\subsection{Principio de Conversión de Frecuencia }
+
+Considerando dos señales senoidales aplicadas al mezclador:
+\begin{itemize}
+    \item Señal de RF: \(fRF​\)
+    \item Señal del oscilador local: \(fLO​\)
+
+\end{itemize}
+
+\noindent la salida del dispositivo no lineal contiene componentes en las frecuencias:
+\begin{equation}
+f_{IF} = \left| f_{RF} - f_{LO} \right| \quad \text{y} \quad f_{RF} + f_{LO}
+\end{equation}
+
+En aplicaciones de radar FMCW, se selecciona la componente de diferencia mediante filtrado, descartando la componente de suma y otros productos no deseados. 
+
+\subsection{Mezclador Balanceado con Diodos Schottky }
+
+Para este diseño se emplea un \textbf{mezclador simple balanceado}, implementado mediante un anillo de \textbf{diodos Schottky BAT15-04W}. Este tipo de diodos es adecuado para aplicaciones de alta frecuencia debido a su baja capacitancia de juntura y baja resistencia serie, lo que permite un comportamiento rápido y una buena linealidad en el proceso de mezcla.
+
+A diferencia de un mezclador no balanceado de un solo diodo, la configuración balanceada presenta un mejor desempeño en términos de aislamiento entre puertos y rechazo de señales no deseadas.
+
+\subsection{Uso del Acoplador Híbrido Rat-Race }
+
+El anillo de diodos se alimenta mediante un acoplador híbrido tipo \textbf{Rat-Race}, el cual actúa como un híbrido de 180°. Este elemento permite combinar las señales de RF y LO de forma diferencial, asegurando que los diodos conduzcan de manera alternada durante cada semiciclo del oscilador local.
+
+El uso del Rat-Race proporciona ventajas significativas:
+\begin{itemize}
+    \item \textbf{Aislamiento entre los puertos RF y LO}, reduciendo interferencias.
+    \item \textbf{Supresión del ruido de amplitud del LO}, al cancelarse componentes comunes.
+    \item \textbf{Rechazo de armónicos pares}, mejorando la pureza espectral de la señal IF.
+    \item Mayor estabilidad frente a desbalances del circuito.
+\end{itemize}
+
+\subsubsection{Circuito del Rat-Race Splitter}
+
+Del paper "Design of Lumped Rat-Race Coupler in Multilayer LTCC" Presentado por Department of Electrical Engineering and Graduate Institute of Communication Engineering,
+National Taiwan University, Taipei, Taiwan, R.O.C.
+Obtenemos el circuito presente en la Figura \ref{fig:Rat-Race_Circuito}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.7\textwidth]
+{Figures/4_Mixer/Rat-Race_Circuito.pdf}
+\caption{Circuito del Rat-Race Splitter.}
+\label{fig:Rat-Race_Circuito}
+\end{figure}
+
+
+\subsubsection{Parámetros de Diseño}
+
+\begin{itemize}
+    \item \textbf{Frecuencia Central ($f_0$):} \SI{1}{\giga\hertz} ($10^9$ Hz)
+    \item \textbf{Frecuencia Angular ($\omega$):} 
+    \[
+        \omega = 2\pi f_0 \approx \SI{6.283e9}{\radian\per\second}
+    \]
+    \item \textbf{Impedancia de Puerto ($Z_0$):} \SI{50}{\ohm}
+    \item \textbf{Impedancia Característica del Anillo ($Z_{ring}$):} 
+    Para un acoplador Rat-Race estándar de 3 dB, la impedancia del anillo es $\sqrt{2} Z_0$.
+    \begin{equation}
+        Z_{ring} = 50 \times \sqrt{2} \approx \SI{70.71}{\ohm}
+    \end{equation}
+\end{itemize}
+
+\subsubsection{Fórmulas de Cálculo}
+
+Según la Sección II y la Ecuación (2) del artículo de referencia, los tramos del acoplador Rat-Race
+se reemplazan por redes equivalentes concentradas para su implementación a \SI{1}{\giga\hertz}.
+
+\paragraph{Secciones de $90^\circ$ (Paso Bajo)}
+Las secciones de $90^\circ$ se reemplazan por una red $\Pi$ compuesta por un inductor en serie ($L_1$)
+y dos condensadores en derivación ($C_1$).
+\begin{align}
+    L_1 &= \frac{Z_{ring}}{\omega} \\
+    C_1 &= \frac{1}{\omega Z_{ring}}
+\end{align}
+
+\paragraph{Sección de $270^\circ$ (Paso Alto)}
+La sección de $270^\circ$ se reemplaza por dos celdas $\Pi$ de $-45^\circ$ en cascada,
+compuestas por los elementos $C_2$ y $L_2$.
+\begin{align}
+    C_2 &= \frac{\sqrt{2}}{\omega Z_{ring}} \\
+    L_2 &= \frac{Z_{ring}}{\omega (\sqrt{2}-1)}
+\end{align}
+
+\paragraph{Elemento Reducido ($C_3$)}
+En los puertos 2 y 4, el tanque LC paralelo formado por $L_2$ y $C_1$ puede reemplazarse por
+un único condensador equivalente $C_3$, dado por:
+\begin{equation}
+    C_3 = \frac{2 - \sqrt{2}}{\omega Z_{ring}}
+\end{equation}
+
+\subsubsection{Cálculos Numéricos a \SI{1}{\giga\hertz}}
+
+\paragraph{Elementos Básicos}\mbox{}
+
+\textbf{Inductor en Serie ($L_1$):}
+\[
+    L_1 = \frac{70.71}{2\pi \times 10^9} \approx \mathbf{11.25\,\text{nH}}
+\]
+
+\textbf{Condensador en Derivación ($C_1$):}
+\[
+    C_1 = \frac{1}{2\pi \times 10^9 \times 70.71} \approx \mathbf{2.25\,\text{pF}}
+\]
+
+\textbf{Condensador en Serie ($C_2$):}
+\[
+    C_2 = \frac{1.4142}{2\pi \times 10^9 \times 70.71} \approx \mathbf{3.18\,\text{pF}}
+\]
+
+\textbf{Inductor en Derivación ($L_2$):}
+\[
+    L_2 = \frac{70.71}{2\pi \times 10^9 \times 0.4142} \approx \mathbf{27.17\,\text{nH}}
+\]
+
+\paragraph{Componentes Combinados para el Modelo Reducido}
+
+El modelo reducido combina componentes en paralelo en distintos nodos del circuito:
+
+\begin{itemize}
+    \item \textbf{$2C_1$ (Puertos 1 y 3):}
+    \[
+        2 \times 2.25\,\text{pF} = \mathbf{4.50\,\text{pF}}
+    \]
+
+    \item \textbf{$C_3$ (Puertos 2 y 4):}
+    \[
+        C_3 = \frac{0.5858}{6.283 \times 10^9 \times 70.71}
+        \approx \mathbf{1.32\,\text{pF}}
+    \]
+
+    \item \textbf{$L_2/2$ (Rama Inferior Central):}
+    \[
+        \frac{27.17\,\text{nH}}{2} = \mathbf{13.59\,\text{nH}}
+    \]
+\end{itemize}
+
+\subsubsection{Tabla de Valores Finales}
+
+Los valores finales requeridos para implementar el circuito del acoplador Rat-Race
+mostrado en la Fig.~4(b) a \SI{1}{\giga\hertz} se resumen en la Tabla~\ref{tab:rat_race_valores}.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{@{}llcl@{}}
+\toprule
+\textbf{Etiqueta} & \textbf{Tipo} & \textbf{Valor} & \textbf{Descripción} \\ \midrule
+$L_1$   & Inductor     & \SI{11.25}{\nano\henry} & Elemento serie (ramas superior y laterales) \\
+$2C_1$  & Condensador  & \SI{4.50}{\pico\farad} & Derivación en Puertos 1 y 3 \\
+$C_3$   & Condensador  & \SI{1.32}{\pico\farad} & Derivación en Puertos 2 y 4 \\
+$L_2/2$ & Inductor     & \SI{13.59}{\nano\henry} & Derivación central de la rama inferior \\
+$C_2$   & Condensador  & \SI{3.18}{\pico\farad} & Elemento serie en la rama inferior \\ \bottomrule
+\end{tabular}
+\caption{Valores finales del modelo reducido del acoplador Rat-Race a \SI{1}{\giga\hertz}.}
+\label{tab:rat_race_valores}
+\end{table}
+ 
+\subsection{Ganancia de Conversión }
+
+La \textbf{ganancia de conversión} del mezclador se define como la relación entre la potencia de la señal IF obtenida a la salida y la potencia de la señal RF aplicada a la entrada, manteniendo fija la potencia del oscilador local. Este parámetro es fundamental para evaluar el desempeño del mezclador y su impacto en la cadena de recepción del radar.
+
+En mezcladores pasivos basados en diodos Schottky, la ganancia de conversión suele ser negativa (pérdida de conversión), siendo su valor dependiente de la potencia del LO y del correcto diseño del circuito de acoplamiento.
+
+\subsection{Circuito de Referencia Utilizado }
+
+El diseño del mezclador se basa en la nota de aplicación \textbf{AN1808 de Infineon}, la cual describe la implementación de un mezclador balanceado mediante diodos Schottky en configuración de anillo, alimentado por un acoplador híbrido Rat-Race. Este circuito sirve como referencia para el análisis y la simulación realizada en este trabajo, adaptándose a las especificaciones del radar FMCW bajo estudio. 
+Está compuesto por los siguientes bloques:
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.7\textwidth]{Figures/4_Mixer/Mixer_Block_v2.pdf}
+\caption{Diagrama en bloques del Mixer}
+\end{figure}
+
+\begin{itemize}
+    \item \textbf{Amplificador}
+Recibe la señal desde la etapa de RF y la transmite hacia el Rat-Race Splitter, atenuando las frecuencias adyacentes e imagen que puedan ingresar por la antena.
+\end{itemize}
+
+\begin{itemize}
+    \item \textbf{Rat-Race Splitter}
+Genera una División de la señal en 2 señales con una diferencia de fase de 180ª las cuales ingresan a los diodos que funcionaran de manera balanceada.
+\end{itemize}
+
+    \begin{itemize}
+        \item \textbf{Diodos}
+Gracias al Rat-Race, las señales llegan desfasadas 180° entre sí. Esto significa que cuando un diodo conduce, el otro está bloqueado, alternando según el ciclo del oscilador local.
+    \end{itemize}
+ 
 \section{Simulación}
 
-Contenido pendiente.
+\subsection{Diseño del núcleo del Mixer}
 
-\section{Resultados}
+Para el análisis y simulación del mezclador en el entorno ADS se partió de una estructura modular, donde el circuito se divide en bloques funcionales claramente diferenciados. En particular, el núcleo del mezclador está constituido por un arreglo de diodos Schottky en configuración balanceada, responsable del proceso no lineal de mezcla entre las señales de RF y del oscilador local (LO).
 
-Contenido pendiente.
+Esta arquitectura permite aislar el comportamiento intrínseco del proceso de conversión de frecuencia del resto de los bloques pasivos del sistema, facilitando el análisis de parámetros fundamentales como la ganancia de conversión y el nivel de excitación requerido del LO. El núcleo del mezclador se implementó a partir de un circuito de referencia basado en diodos Schottky, el cual fue adaptado para su integración con el resto del sistema de radar FMCW.
+
+La separación del núcleo como un bloque independiente ofrece la ventaja de poder evaluar su desempeño de manera aislada, permitiendo realizar ajustes sobre los componentes activos sin afectar la red de acoplamiento y distribución de señales.
+
+En las Figuras \ref{fig:vco_core_schematic} y \ref{fig:vco_core_symbol} respectivamente se pueden apreciar el esquemático y símbolo utilizados en el software de diseño.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{Figures/4_Mixer/mixer_core_schematic.pdf}
+\caption{Esquemático del núcleo del Mixer.}
+\label{fig:mixer_core_schematic}
+\end{figure}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{Figures/4_Mixer/mixer_core_symbol.pdf}
+\caption{Símbolo del núcleo del Mixer.}
+\label{fig:mixer_core_symbol}
+\end{figure}
+\subsection{Diseño del Rat-Race}
+
+El núcleo del mezclador se alimenta a través de una red de acoplamiento implementada mediante un acoplador híbrido tipo Rat-Race, el cual cumple la función de combinar y distribuir las señales de RF y LO con las relaciones de fase adecuadas. Este bloque resulta esencial para la correcta operación del mezclador balanceado, ya que asegura la excitación diferencial de los diodos del anillo.
+
+El Rat-Race fue diseñado y simulado como un bloque independiente, permitiendo verificar su correcto funcionamiento en términos de adaptación de impedancias, aislamiento entre puertos y relación de fase entre las señales de salida. El esquemático diseñado y su correspondiente símbolo se encuentran en las Figuras \ref{fig:rat_race_schematic} y \ref{fig:rat_race_symbol}. Esta metodología modular facilita la validación individual de cada etapa antes de su integración con el núcleo del mezclador.
+
+La implementación del acoplador híbrido como una etapa separada permite además analizar su influencia sobre el desempeño global del mezclador, particularmente en lo que respecta al aislamiento entre RF y LO y al rechazo de componentes no deseadas en la salida IF.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{Figures/4_Mixer/rat_race_schematic.pdf}
+\caption{Esquemático del Rat-Race.}
+\label{fig:rat_race_schematic}
+\end{figure}
+ \begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{Figures/4_Mixer/rat_race_symbol.pdf}
+\caption{Símbolo del Rat-Race.}
+\label{fig:rat_race_symbol}
+\end{figure}
+\subsection{Configuración para simulación del núcleo del Mixer}
+
+La Figura \ref{fig:mixer_analysis} muestra el esquemático utilizado para la simulación del núcleo del mezclador en el entorno ADS. En este esquema se incluye el bloque del mezclador propiamente dicho junto con los controladores de simulación necesarios para analizar su comportamiento en régimen no lineal.
+
+Para el análisis se empleó un controlador de \textbf{Harmonic Balance}, el cual permite modelar adecuadamente el proceso de mezcla entre la señal de radiofrecuencia (RF) y la señal del oscilador local (LO). La señal RF se aplica mediante una fuente senoidal de pequeña amplitud, mientras que la señal LO se inyecta a través de una fuente independiente cuya potencia es variada de forma controlada.
+
+Con el objetivo de evaluar la influencia del nivel de excitación del oscilador local, se incorporó un bloque de \textbf{barrido de parámetros}, permitiendo modificar la potencia del LO sin alterar la topología del circuito. Esta configuración facilita la obtención de la ganancia de conversión del mezclador en función de la potencia del LO, parámetro clave para caracterizar su desempeño.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{Figures/4_Mixer/mixer_analysis.pdf}
+\caption{Configuración de simulación para el núcleo del Mixer.}
+\label{fig:mixer_analysis}
+\end{figure}
+\subsection{Configuración para simulación del Rat-Race}
+
+La Figura \ref{fig:mixer_analysis} presenta el esquemático empleado para la simulación del acoplador híbrido tipo Rat-Race, el cual constituye la red de acoplamiento del mezclador balanceado. En este caso, el análisis se realizó mediante un controlador de \textbf{S-parameters}, adecuado para evaluar el comportamiento lineal del dispositivo en función de la frecuencia.
+
+El acoplador se conectó a puertos adaptados de 50 Ω, permitiendo analizar los coeficientes de reflexión, transmisión y aislamiento entre los distintos puertos. Esta configuración posibilita la verificación de las propiedades fundamentales del Rat-Race, tales como la correcta división de potencia, el aislamiento del puerto correspondiente y la adaptación en la frecuencia de diseño.
+
+La simulación independiente del acoplador permite validar su funcionamiento antes de integrarlo con el núcleo del mezclador, asegurando así un comportamiento adecuado del sistema completo.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{Figures/4_Mixer/rat_race_analysis.pdf}
+\caption{Configuración de simulación para el Rat-Race.}
+\label{fig:rat_race_analysis}
+\end{figure}
+ 
+\subsection{Parámetros S del acoplador}
+
+Las Figuras \ref{fig:rat_race_s_params_v2} y \ref{fig:rat_race_s_params_table_v2} muestran los parámetros S simulados del acoplador híbrido tipo Rat-Race en el rango de frecuencias de interés. A partir de dichos resultados se analizan las principales características del dispositivo en torno a su frecuencia central de diseño. 
+
+\subsubsection{Adaptación y aislamiento}
+
+Las curvas correspondientes a S(1,1) y S(4,1) presentan mínimos pronunciados en torno a 1.0 GHz, alcanzando valores del orden de \textbf{−}40 dB para la reflexión y \textbf{−}43 dB para el aislamiento, según se observa tanto en la gráfica como en la tabla de resultados. Esto indica que, a dicha frecuencia, el puerto de entrada se encuentra correctamente adaptado y el puerto de aislamiento cumple adecuadamente su función, minimizando la transferencia de potencia no deseada. 
+
+\subsubsection{División de potencia }
+
+Los parámetros S(2,1) y S(3,1), asociados a la transmisión hacia los puertos de salida, presentan valores muy cercanos entre sí alrededor de \textbf{−}3 dB en la frecuencia de diseño. En particular, a 1.0 GHz se obtienen valores de aproximadamente \textbf{−}3.0 dB, lo que confirma una división equitativa de la potencia de entrada entre ambos puertos, comportamiento característico de un acoplador híbrido balanceado. 
+
+\subsubsection{Comportamiento en frecuencia }
+
+Se observa además un segundo punto de buena adaptación a una frecuencia inferior, cercano a 0.65 GHz, lo que sugiere un comportamiento de banda relativamente ancha. No obstante, el desempeño óptimo del acoplador —considerando simultáneamente adaptación, aislamiento y división de potencia— se alcanza en torno a 1.0 GHz, frecuencia para la cual fue diseñado el circuito.
+
+Fuera del rango aproximado de 0.6 a 1.2 GHz, los parámetros S se degradan progresivamente, evidenciando un aumento de la reflexión y una pérdida del equilibrio en la división de potencia, lo que delimita el rango útil de operación del dispositivo.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{Figures/4_Mixer/rat_race_s_params_v2.pdf}
+\caption{Curvas de parámetros S obtenidos para el Rat-Race.}
+\label{fig:rat_race_s_params_v2}
+\end{figure}
+ \begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{Figures/4_Mixer/rat_race_s_params_table_v2.pdf}
+\caption{Valores númericos de parámetros S obtenidos para el Rat-Race.}
+\label{fig:rat_race_s_params_table_v2}
+\end{figure}
+\subsection{Ganancia de Conversión}
+
+En primer lugar, se verificó la correcta generación de la señal de frecuencia intermedia (IF) a la salida del mezclador. La Figura \ref{fig:mixer_spectre_v2} muestra el espectro de la señal de salida, donde se observa una componente dominante a 1 MHz, correspondiente a la diferencia entre las frecuencias de RF y del oscilador local.
+Esta componente constituye la señal de interés que será posteriormente aplicada al filtro de frecuencia intermedia. 
+
+\subsubsection{En función de la potencia del oscilador local}
+
+La ganancia de conversión del mezclador se evaluó en función de la potencia de excitación del oscilador local. Para ello, se realizó un barrido de la potencia del LO manteniendo constante la amplitud de la señal RF.
+
+La Figura \ref{fig:mixer_conv_gain_v2}  muestra los resultados obtenidos, demostrando el comportamiento esperado para un mezclador pasivo basado en diodos Schottky. A bajos niveles de potencia del LO, la ganancia de conversión presenta valores reducidos debido a la conducción incompleta de los diodos. A medida que la potencia del oscilador local aumenta, los diodos conmutan de forma más eficiente, provocando un incremento de la ganancia de conversión, la cual tiende a estabilizarse para valores elevados de potencia del LO.
+
+Este comportamiento evidencia una transición hacia un régimen de operación más cercano al ideal, donde el mezclador presenta una respuesta aproximadamente lineal frente a variaciones adicionales de la potencia del oscilador local.
+
+ \begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{Figures/4_Mixer/mixer_spectre_v2.pdf}
+\caption{Espectro de la señal de salida del Mixer.}
+\label{fig:mixer_spectre_v2}
+\end{figure}
+ \begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{Figures/4_Mixer/mixer_conv_gain_v2.pdf}
+\caption{Ganancia de conversión del mezclador.}
+\label{fig:mixer_conv_gain_v2}
+\end{figure}
+\section{Conclusiones}
+
+A lo largo del desarrollo de esta sección se analizó el funcionamiento y desempeño del mezclador utilizado en el sistema Radar FMCW, haciendo énfasis en su comportamiento frecuencial y en la ganancia de conversión. A partir de las simulaciones realizadas se verificó correctamente el proceso de mezcla, observándose a la salida la generación de la frecuencia intermedia correspondiente a la diferencia entre la señal de RF y el oscilador local, validando el correcto funcionamiento del núcleo del mezclador y del acoplador rat-race.
+Asimismo, se estudió la ganancia de conversión en función de la potencia del oscilador local, observándose un comportamiento acorde a lo esperado para un mezclador pasivo basado en diodos Schottky. A bajos niveles de potencia del LO, la ganancia de conversión resulta reducida debido a la conmutación parcial de los diodos, mientras que al incrementar dicha potencia la ganancia aumenta y tiende a estabilizarse. Este comportamiento confirma la necesidad de una
+potencia adecuada del oscilador local para garantizar un régimen de operación eficiente y predecible del mezclador, asegurando una correcta conversión de frecuencia hacia la etapa posterior de filtrado de FI.
+
+

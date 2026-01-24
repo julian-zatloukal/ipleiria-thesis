@@ -227,6 +227,14 @@ Las siguientes figuras comparan el comportamiento del amplificador con los valor
     tick label style={font=\footnotesize},
     label style={font=\small},
 ]
+% Línea de referencia -10 dB (dibujada primero para quedar detrás)
+\addplot[black, dashed, line width=0.8pt, forget plot] coordinates {(0.5,-10) (1.5,-10)};
+\node[anchor=south west, font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:0.52,-10) {$-10$ dB};
+
+% Línea de referencia -20 dB
+\addplot[black, dashed, line width=0.8pt, forget plot] coordinates {(0.5,-20) (1.5,-20)};
+\node[anchor=south west, font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:0.52,-20) {$-20$ dB};
+
 % Datos antes de optimización (866 MHz)
 \addplot[blue, dashed, thick] table[
     x expr=\thisrowno{0}/1e9,
@@ -244,14 +252,6 @@ Las siguientes figuras comparan el comportamiento del amplificador con los valor
     skip first n=1
 ] {Datasets/2_PA/data_optimization_pa_core_s11_1GHZ.dat};
 \addlegendentry{Optimizado (1 GHz)}
-
-% Línea de referencia -10 dB
-\addplot[black, dashed, line width=0.8pt] coordinates {(0.5,-10) (1.5,-10)};
-\node[anchor=south west, font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:0.52,-10) {$-10$ dB};
-
-% Línea de referencia -20 dB
-\addplot[black, dashed, line width=0.8pt] coordinates {(0.5,-20) (1.5,-20)};
-\node[anchor=south west, font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:0.52,-20) {$-20$ dB};
 
 \end{axis}
 \end{tikzpicture}
@@ -280,6 +280,10 @@ La Figura \ref{fig:pa_s11_comparison} evidencia la resintonización del amplific
     tick label style={font=\footnotesize},
     label style={font=\small},
 ]
+% Línea de referencia 12 dB (dibujada primero para quedar detrás)
+\addplot[black, dashed, line width=0.8pt, forget plot] coordinates {(0.5,12) (1.5,12)};
+\node[anchor=south west, font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:0.65,12) {$12$ dB};
+
 % Datos antes de optimización (866 MHz)
 \addplot[blue, dashed, thick] table[
     x expr=\thisrowno{0}/1e9,
@@ -297,10 +301,6 @@ La Figura \ref{fig:pa_s11_comparison} evidencia la resintonización del amplific
     skip first n=1
 ] {Datasets/2_PA/data_optimization_pa_core_s21_1GHZ.dat};
 \addlegendentry{Optimizado (1 GHz)}
-
-% Línea de referencia 12 dB
-\addplot[black, dashed, line width=0.8pt] coordinates {(0.5,12) (1.5,12)};
-\node[anchor=south west, font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:0.52,12) {$12$ dB};
 
 \end{axis}
 \end{tikzpicture}
@@ -387,8 +387,12 @@ Antes de ejecutar la optimización automática, se realizó un barrido paramétr
     label style={font=\small},
     mark options={scale=0.8},
 ]
+% Línea de referencia del óptimo (dibujada primero para quedar detrás)
+\addplot[black, dashed, line width=1pt, forget plot] coordinates {(0.855,{-8}) (0.855,{14})};
+\node[anchor=south, font=\scriptsize, fill=white, inner sep=1pt, rotate=90] at (axis cs:0.856,6) {Óptimo: 0.855 V};
+
 % Datos del barrido de Vbias
-\addplot[blue, thick, mark=*] coordinates {
+\addplot[red, thick, mark=*] coordinates {
     (0.700, 9.557)
     (0.713, 10.045)
     (0.726, 10.414)
@@ -411,10 +415,6 @@ Antes de ejecutar la optimización automática, se realizó un barrido paramétr
     (0.950, -5.983)
 };
 \addlegendentry{Ganancia vs. Vbias}
-
-% Línea de referencia del óptimo
-\addplot[red, dashed, line width=1pt] coordinates {(0.855,{-8}) (0.855,{14})};
-\node[anchor=south, font=\scriptsize, fill=white, inner sep=1pt, rotate=90] at (axis cs:0.862,6) {Óptimo: 0.855 V};
 
 \end{axis}
 \end{tikzpicture}
@@ -467,22 +467,22 @@ Las siguientes figuras presentan los parámetros S del amplificador con los valo
     tick label style={font=\footnotesize},
     label style={font=\small},
 ]
+% Línea de referencia -10 dB (dibujada primero para quedar detrás)
+\addplot[black, dashed, line width=0.8pt, forget plot] coordinates {(0.5,-10) (1.5,-10)};
+\node[anchor=south west, font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:0.52,-10) {$-10$ dB};
+
+% Línea de referencia -20 dB
+\addplot[black, dashed, line width=0.8pt, forget plot] coordinates {(0.5,-20) (1.5,-20)};
+\node[anchor=south west, font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:0.52,-20) {$-20$ dB};
+
 % Datos de S11 con valores optimizados finales
-\addplot[blue, thick] table[
+\addplot[red, thick] table[
     x expr=\thisrowno{0}/1e9,
     y expr=\thisrowno{1},
     col sep=tab,
     skip first n=1
 ] {Datasets/2_PA/data_pa_s_parameters_optimized_values_s11.dat};
 \addlegendentry{$S_{11}$ Final}
-
-% Línea de referencia -10 dB
-\addplot[black, dashed, line width=0.8pt] coordinates {(0.5,-10) (1.5,-10)};
-\node[anchor=south west, font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:0.52,-10) {$-10$ dB};
-
-% Línea de referencia -20 dB
-\addplot[black, dashed, line width=0.8pt] coordinates {(0.5,-20) (1.5,-20)};
-\node[anchor=south west, font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:0.52,-20) {$-20$ dB};
 
 \end{axis}
 \end{tikzpicture}
@@ -511,18 +511,18 @@ La Figura \ref{fig:pa_s11_final} muestra que el parámetro $S_{11}$ presenta una
     tick label style={font=\footnotesize},
     label style={font=\small},
 ]
+% Línea de referencia 12 dB (dibujada primero para quedar detrás)
+\addplot[black, dashed, line width=0.8pt, forget plot] coordinates {(0.5,12) (1.5,12)};
+\node[anchor=south west, font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:0.52,12) {$12$ dB};
+
 % Datos de S21 con valores optimizados finales
-\addplot[blue, thick] table[
+\addplot[red, thick] table[
     x expr=\thisrowno{0}/1e9,
     y expr=\thisrowno{1},
     col sep=tab,
     skip first n=1
 ] {Datasets/2_PA/data_pa_s_parameters_optimized_values_s21.dat};
 \addlegendentry{$S_{21}$ Final}
-
-% Línea de referencia 12 dB
-\addplot[black, dashed, line width=0.8pt] coordinates {(0.5,12) (1.5,12)};
-\node[anchor=south west, font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:0.52,12) {$12$ dB};
 
 \end{axis}
 \end{tikzpicture}
@@ -551,18 +551,18 @@ La Figura \ref{fig:pa_s21_final} muestra la respuesta de ganancia del amplificad
     tick label style={font=\footnotesize},
     label style={font=\small},
 ]
+% Línea de referencia -10 dB (dibujada primero para quedar detrás)
+\addplot[black, dashed, line width=0.8pt, forget plot] coordinates {(0.5,-10) (1.5,-10)};
+\node[anchor=south west, font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:0.52,-10) {$-10$ dB};
+
 % Datos de S22 con valores optimizados finales
-\addplot[blue, thick] table[
+\addplot[red, thick] table[
     x expr=\thisrowno{0}/1e9,
     y expr=\thisrowno{1},
     col sep=tab,
     skip first n=1
 ] {Datasets/2_PA/data_pa_s_parameters_optimized_values_s22.dat};
 \addlegendentry{$S_{22}$ Final}
-
-% Línea de referencia -10 dB
-\addplot[black, dashed, line width=0.8pt] coordinates {(0.5,-10) (1.5,-10)};
-\node[anchor=south west, font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:0.52,-10) {$-10$ dB};
 
 \end{axis}
 \end{tikzpicture}
@@ -592,7 +592,7 @@ La Figura \ref{fig:pa_s22_final} muestra la adaptación de salida del amplificad
     label style={font=\small},
 ]
 % Datos de S12 con valores optimizados finales
-\addplot[blue, thick] table[
+\addplot[red, thick] table[
     x expr=\thisrowno{0}/1e9,
     y expr=\thisrowno{1},
     col sep=tab,
@@ -631,13 +631,7 @@ La Tabla \ref{tab:pa_final_values} resume los valores finales del amplificador d
 \end{tabular}
 \end{table}
 
-En este punto, el diseño del amplificador está prácticamente completo en el simulador, habiendo logrado:
-
-\begin{enumerate}
-    \item \textbf{Adaptación de Impedancias:} Optimizada para \qty{1}{\GHz} con $S_{11} < \qty{-25}{\dB}$.
-    \item \textbf{Punto de Operación DC:} Optimizado a $\approx \qty{0,855}{\V}$ para obtener la máxima ganancia disponible.
-    \item \textbf{Ganancia:} Aproximadamente \qty{11,6}{\dB} a la frecuencia central, cercano al objetivo de \qty{12}{\dB}.
-\end{enumerate}
+En este punto, el diseño del amplificador está prácticamente completo en el simulador, habiendo logrado una adaptación de impedancias optimizada para \qty{1}{\GHz} con $S_{11} < \qty{-25}{\dB}$, un punto de operación DC optimizado a $\approx \qty{0,855}{\V}$ para obtener la máxima ganancia disponible, y una ganancia de aproximadamente \qty{11,6}{\dB} a la frecuencia central, cercano al objetivo de \qty{12}{\dB}.
 
 \subsection{Análisis de Estabilidad e Inconvenientes Encontrados}
 
@@ -690,16 +684,16 @@ En la Figura \ref{fig:pa_stab_fact_unstab} se muestra el factor de estabilidad $
     tick label style={font=\footnotesize},
     label style={font=\small},
 ]
+% Línea de referencia K=1 (dibujada primero para quedar detrás)
+\addplot[black, dashed, line width=0.8pt, forget plot] coordinates {(0,1) (15,1)};
+\node[anchor=south west, font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:0.2,1.05) {$K = 1$};
+
 \addplot[red, thick, each nth point=100, filter discard warning=false, unbounded coords=discard] table[
     x expr=\thisrowno{0}/1e9,
     y index=1,
     col sep=tab,
     skip first n=1
 ] {Datasets/2_PA/data_pa_stab_fact_unstab.dat};
-
-% Línea de referencia K=1
-\addplot[black, dashed, line width=0.8pt] coordinates {(0,1) (15,1)};
-\node[anchor=south west, font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:0.2,1.05) {$K = 1$};
 
 \end{axis}
 \end{tikzpicture}
@@ -734,16 +728,16 @@ Se repiten los análisis de estabilidad y se trazan nuevamente las curvas de par
     tick label style={font=\footnotesize},
     label style={font=\small},
 ]
+% Línea de referencia K=1 (dibujada primero para quedar detrás)
+\addplot[black, dashed, line width=0.8pt, forget plot] coordinates {(0,1) (15,1)};
+\node[anchor=south west, font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:0.2,1.1) {$K = 1$};
+
 \addplot[red, thick, each nth point=100, filter discard warning=false, unbounded coords=discard, restrict y to domain=0:4] table[
     x expr=\thisrowno{0}/1e9,
     y index=1,
     col sep=tab,
     skip first n=1
 ] {Datasets/2_PA/data_pa_stab_fact_stab.dat};
-
-% Línea de referencia K=1
-\addplot[black, dashed, line width=0.8pt] coordinates {(0,1) (15,1)};
-\node[anchor=south west, font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:0.2,1.1) {$K = 1$};
 
 \end{axis}
 \end{tikzpicture}
@@ -1017,7 +1011,7 @@ Este análisis espectral marca el fin de la síntesis del circuito. El diseño h
 
 \subsection{Análisis en el Dominio Temporal: Formas de Onda de Colector, Fuente y Carga}
 
-En este apartado se analizan las formas de onda en el transitorio del amplificador y en el estado estacionario. Para el transitorio, en la Figura \ref{fig:pa_transient_waveforms} se pueden ver del lado izquierdo las formas de onda de tensión para colector, fuente y carga, y del lado derecho la forma de onda de corriente. Por otro lado, en la Figura \ref{fig:pa_steady_state_waveforms} se muestra de la misma manera las formas de onda luego del transitorio, en estado estacionario.
+Se analizan las formas de onda del amplificador en dos ventanas temporales: el transitorio (\qty{0}{\ns} a \qty{40}{\ns}) en la Figura \ref{fig:pa_transient_waveforms}, y el estado estacionario (\qty{1}{\us} a \qty{1,004}{\us}, equivalente a 4 períodos a \qty{1}{\GHz}) en la Figura \ref{fig:pa_steady_state_waveforms}.
 
 \begin{figure}[htbp]
 \centering
@@ -1105,7 +1099,6 @@ En este apartado se analizan las formas de onda en el transitorio del amplificad
 \label{fig:pa_transient_waveforms}
 \end{figure}
 
-Durante el transitorio se observa cómo las señales evolucionan desde el estado inicial hasta alcanzar el régimen estacionario. La tensión de colector $V_C$ oscila entre \qty{0}{\V} y \qty{11,3}{\V} con una excursión máxima de aproximadamente \qty{11,3}{\V}. La corriente de colector $I_C$ varía entre \qty{-19,8}{\mA} y \qty{145,9}{\mA}, mostrando los picos característicos del arranque del amplificador. La tensión de fuente $V_{CC}$ se mantiene constante en \qty{8}{\V}, mientras que la tensión en la carga $V_{RL}$ presenta una oscilación de \qty{2,4}{\V} pico a pico.
 
 \begin{figure}[htbp]
 \centering
@@ -1193,8 +1186,6 @@ Durante el transitorio se observa cómo las señales evolucionan desde el estado
 \label{fig:pa_steady_state_waveforms}
 \end{figure}
 
-En estado estacionario, las formas de onda presentan un comportamiento periódico estable. La tensión de colector $V_C$ oscila entre \qty{4,7}{\V} y \qty{11,3}{\V}, mostrando una excursión pico a pico de aproximadamente \qty{6,5}{\V} centrada alrededor de $V_{CC} = \qty{8}{\V}$. La corriente de colector $I_C$ varía entre \qty{-4,4}{\mA} y \qty{60,5}{\mA}, confirmando la operación en Clase AB donde el dispositivo conduce durante más de medio ciclo pero no de forma continua. La corriente en la carga $I_{RL}$ presenta una forma de onda sinusoidal simétrica con una amplitud de aproximadamente \qty{22}{\mA} pico, correspondiente a la potencia de salida esperada sobre la carga de \qty{50}{\ohm}.
-
 \section{Conclusiones}
 
-Contenido pendiente.
+Se ha diseñado exitosamente un amplificador de potencia en Clase AB para la banda de \qty{1}{\GHz}, partiendo de la nota de aplicación AN11501 de NXP como referencia. Mediante un proceso sistemático de optimización, se resintonizaron las redes de adaptación de entrada y salida, y se ajustó el punto de polarización a $V_{bias} = \qty{0,855}{\V}$. El diseño final presenta una ganancia de \qty{10,97}{\dB} con $S_{11} < \qty{-25}{\dB}$ a la frecuencia central, cumpliendo los requisitos de adaptación especificados. El análisis de estabilidad reveló oscilaciones parásitas que fueron mitigadas mediante la adición de una resistencia de estabilización de \qty{695}{\ohm}, garantizando $K > 1$ en todo el rango de frecuencias. La distorsión armónica total del \qty{0,27}{\percent} y la supresión del segundo armónico de \qty{-51}{\dBc} confirman la idoneidad del amplificador para la aplicación radar FMCW.
