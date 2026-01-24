@@ -87,7 +87,7 @@ se reemplazan por redes equivalentes concentradas para su implementación a \SI{
 
 \paragraph{Secciones de $90^\circ$ (Paso Bajo)}
 Las secciones de $90^\circ$ se reemplazan por una red $\Pi$ compuesta por un inductor en serie ($L_1$)
-y dos condensadores en derivación ($C_1$).
+y dos capacitores en derivación ($C_1$).
 \begin{align}
     L_1 &= \frac{Z_{ring}}{\omega} \\
     C_1 &= \frac{1}{\omega Z_{ring}}
@@ -103,7 +103,7 @@ compuestas por los elementos $C_2$ y $L_2$.
 
 \paragraph{Elemento Reducido ($C_3$)}
 En los puertos 2 y 4, el tanque LC paralelo formado por $L_2$ y $C_1$ puede reemplazarse por
-un único condensador equivalente $C_3$, dado por:
+un único capacitor equivalente $C_3$, dado por:
 \begin{equation}
     C_3 = \frac{2 - \sqrt{2}}{\omega Z_{ring}}
 \end{equation}
@@ -117,12 +117,12 @@ un único condensador equivalente $C_3$, dado por:
     L_1 = \frac{70.71}{2\pi \times 10^9} \approx \mathbf{11.25\,\text{nH}}
 \]
 
-\textbf{Condensador en Derivación ($C_1$):}
+\textbf{Capacitor en Derivación ($C_1$):}
 \[
     C_1 = \frac{1}{2\pi \times 10^9 \times 70.71} \approx \mathbf{2.25\,\text{pF}}
 \]
 
-\textbf{Condensador en Serie ($C_2$):}
+\textbf{Capacitor en Serie ($C_2$):}
 \[
     C_2 = \frac{1.4142}{2\pi \times 10^9 \times 70.71} \approx \mathbf{3.18\,\text{pF}}
 \]
@@ -165,10 +165,10 @@ mostrado en la Fig.~4(b) a \SI{1}{\giga\hertz} se resumen en la Tabla~\ref{tab:r
 \toprule
 \textbf{Etiqueta} & \textbf{Tipo} & \textbf{Valor} & \textbf{Descripción} \\ \midrule
 $L_1$   & Inductor     & \SI{11.25}{\nano\henry} & Elemento serie (ramas superior y laterales) \\
-$2C_1$  & Condensador  & \SI{4.50}{\pico\farad} & Derivación en Puertos 1 y 3 \\
-$C_3$   & Condensador  & \SI{1.32}{\pico\farad} & Derivación en Puertos 2 y 4 \\
+$2C_1$  & Capacitor  & \SI{4.50}{\pico\farad} & Derivación en Puertos 1 y 3 \\
+$C_3$   & Capacitor  & \SI{1.32}{\pico\farad} & Derivación en Puertos 2 y 4 \\
 $L_2/2$ & Inductor     & \SI{13.59}{\nano\henry} & Derivación central de la rama inferior \\
-$C_2$   & Condensador  & \SI{3.18}{\pico\farad} & Elemento serie en la rama inferior \\ \bottomrule
+$C_2$   & Capacitor  & \SI{3.18}{\pico\farad} & Elemento serie en la rama inferior \\ \bottomrule
 \end{tabular}
 \caption{Valores finales del modelo reducido del acoplador Rat-Race a \SI{1}{\giga\hertz}.}
 \label{tab:rat_race_valores}
@@ -308,6 +308,41 @@ Fuera del rango aproximado de 0.6 a 1.2 GHz, los parámetros S se degradan progr
 \caption{Valores númericos de parámetros S obtenidos para el Rat-Race.}
 \label{fig:rat_race_s_params_table_v2}
 \end{figure}
+
+\subsubsection{Matriz de Parámetros S a \SI{1}{\giga\hertz}}
+
+Para generar la matriz de parámetros S en magnitud (dB) a \SI{1}{\giga\hertz}, se utilizaron los datos correspondientes al punto de frecuencia más cercano disponible en la simulación (\SI{1.002}{\giga\hertz}).
+
+A partir de las magnitudes lineales $|S_{ij}|$ extraídas:
+\begin{align*}
+    |S_{11}| &= 0.009, & |S_{12}| &= 0.705, & |S_{13}| &= 0.709, & |S_{14}| &= 0.007 \\
+    |S_{21}| &= 0.705, & |S_{22}| &= 0.006, & |S_{23}| &= 0.007, & |S_{24}| &= 0.709 \\
+    |S_{31}| &= 0.709, & |S_{32}| &= 0.007, & |S_{33}| &= 0.009, & |S_{34}| &= 0.705 \\
+    |S_{41}| &= 0.007, & |S_{42}| &= 0.709, & |S_{43}| &= 0.705, & |S_{44}| &= 0.006
+\end{align*}
+
+Se aplicó la conversión a decibeles mediante la fórmula $S_{\text{dB}} = 20 \cdot \log_{10}(|S|)$, obteniendo los siguientes valores característicos:
+\begin{itemize}
+    \item $20 \log_{10}(0.709) \approx \mathbf{-2.99\,\text{dB}}$ (Acoplamiento)
+    \item $20 \log_{10}(0.705) \approx \mathbf{-3.04\,\text{dB}}$ (Acoplamiento)
+    \item $20 \log_{10}(0.009) \approx \mathbf{-40.92\,\text{dB}}$ (Pérdida de retorno/Aislamiento)
+    \item $20 \log_{10}(0.007) \approx \mathbf{-43.10\,\text{dB}}$ (Pérdida de retorno/Aislamiento)
+    \item $20 \log_{10}(0.006) \approx \mathbf{-44.44\,\text{dB}}$ (Pérdida de retorno/Aislamiento)
+\end{itemize}
+
+La matriz de parámetros S resultante en dB a \SI{1}{\giga\hertz} queda expresada como:
+\begin{equation}
+    S_{\text{dB}} = \begin{bmatrix}
+    -40.92 & -3.04 & -2.99 & -43.10 \\
+    -3.04 & -44.44 & -43.10 & -2.99 \\
+    -2.99 & -43.10 & -40.92 & -3.04 \\
+    -43.10 & -2.99 & -3.04 & -44.44
+    \end{bmatrix}
+    \label{eq:rat_race_s_matrix}
+\end{equation}
+
+Esta matriz ilustra el comportamiento típico de un acoplador Rat-Race: la potencia de entrada se divide aproximadamente de forma equitativa ($\approx -3\,\text{dB}$) entre los puertos adyacentes, mientras que el puerto opuesto permanece aislado (valores inferiores a $-40\,\text{dB}$).
+
 \subsection{Ganancia de Conversión}
 
 En primer lugar, se verificó la correcta generación de la señal de frecuencia intermedia (IF) a la salida del mezclador. La Figura \ref{fig:mixer_spectre_v2} muestra el espectro de la señal de salida, donde se observa una componente dominante a 1 MHz, correspondiente a la diferencia entre las frecuencias de RF y del oscilador local.
