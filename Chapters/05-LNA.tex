@@ -438,77 +438,97 @@ table[x index=0, y index=4] {Datasets/5_LNA/correc_potencia.dat};
 \subsection{Parámetros S}
 Como se ve en los siguientes garfios se logro mejorar la ganancia en el punto de interés y se logro tener valores de $S_{11}$ y $S_{22}$ menores a $10dB$ en las frecuencias de interés.
 
-\begin{figure}[h!]
-\centering
-\begin{minipage}{0.48\textwidth}
+\begin{figure}[htbp]
 \centering
 \begin{tikzpicture}
+% Subplot (a) - S11
 \begin{axis}[
-    width=\linewidth,
-    xlabel={Frecuencia},
-    ylabel={dB(S11)},
-    grid=both
+    name=plot1,
+    width=0.48\textwidth,
+    height=5.5cm,
+    xlabel={Frecuencia [GHz]},
+    ylabel={$S_{11}$ [dB]},
+    grid=both,
+    grid style={line width=.1pt, draw=gray!30},
+    major grid style={line width=.2pt,draw=gray!50},
+    tick label style={font=\footnotesize},
+    label style={font=\small},
+    title={\footnotesize (a) $S_{11}$},
 ]
-\addplot[blue, thick] table [
-    x index=0,
+\addplot[blue, thick] table[
+    x expr=\thisrowno{0}/1e9,
     y index=1
 ] {Datasets/5_LNA/simulaciones_corregi.dat};
 \end{axis}
-\end{tikzpicture}
-\end{minipage}
-\hfill
-\begin{minipage}{0.48\textwidth}
-\centering
-\begin{tikzpicture}
+
+% Subplot (b) - S21
 \begin{axis}[
-    width=\linewidth,
-    xlabel={Frecuencia},
-    ylabel={dB(S12)},
-    grid=both
+    name=plot2,
+    at={($(plot1.east)+(1.8cm,0)$)},
+    anchor=west,
+    width=0.48\textwidth,
+    height=5.5cm,
+    xlabel={Frecuencia [GHz]},
+    ylabel={$S_{21}$ [dB]},
+    grid=both,
+    grid style={line width=.1pt, draw=gray!30},
+    major grid style={line width=.2pt,draw=gray!50},
+    tick label style={font=\footnotesize},
+    label style={font=\small},
+    title={\footnotesize (b) $S_{21}$},
 ]
-\addplot[blue, thick] table [
-    x index=0,
-    y index=2
-] {Datasets/5_LNA/simulaciones_corregi.dat};
-\end{axis}
-\end{tikzpicture}
-\end{minipage}
-\vspace{0.5cm}
-\begin{minipage}{0.48\textwidth}
-\centering
-\begin{tikzpicture}
-\begin{axis}[
-    width=\linewidth,
-    xlabel={Frecuencia},
-    ylabel={dB(S21)},
-    grid=both
-]
-\addplot[blue, thick] table [
-    x index=0,
+\addplot[blue, thick] table[
+    x expr=\thisrowno{0}/1e9,
     y index=3
 ] {Datasets/5_LNA/simulaciones_corregi.dat};
 \end{axis}
-\end{tikzpicture}
-\end{minipage}
-\hfill
-\begin{minipage}{0.48\textwidth}
-\centering
-\begin{tikzpicture}
+
+% Subplot (c) - S12
 \begin{axis}[
-    width=\linewidth,
-    xlabel={Frecuencia},
-    ylabel={dB(S22)},
-    grid=both
+    name=plot3,
+    at={($(plot1.south)-(0,2.0cm)$)},
+    anchor=north,
+    width=0.48\textwidth,
+    height=5.5cm,
+    xlabel={Frecuencia [GHz]},
+    ylabel={$S_{12}$ [dB]},
+    grid=both,
+    grid style={line width=.1pt, draw=gray!30},
+    major grid style={line width=.2pt,draw=gray!50},
+    tick label style={font=\footnotesize},
+    label style={font=\small},
+    title={\footnotesize (c) $S_{12}$},
 ]
-\addplot[blue, thick] table [
-    x index=0,
+\addplot[blue, thick] table[
+    x expr=\thisrowno{0}/1e9,
+    y index=2
+] {Datasets/5_LNA/simulaciones_corregi.dat};
+\end{axis}
+
+% Subplot (d) - S22
+\begin{axis}[
+    name=plot4,
+    at={($(plot3.east)+(1.8cm,0)$)},
+    anchor=west,
+    width=0.48\textwidth,
+    height=5.5cm,
+    xlabel={Frecuencia [GHz]},
+    ylabel={$S_{22}$ [dB]},
+    grid=both,
+    grid style={line width=.1pt, draw=gray!30},
+    major grid style={line width=.2pt,draw=gray!50},
+    tick label style={font=\footnotesize},
+    label style={font=\small},
+    title={\footnotesize (d) $S_{22}$},
+]
+\addplot[blue, thick] table[
+    x expr=\thisrowno{0}/1e9,
     y index=4
 ] {Datasets/5_LNA/simulaciones_corregi.dat};
 \end{axis}
 \end{tikzpicture}
-\end{minipage}
-
-\caption{Parámetros S de circuito optimizado}
+\captionsetup{justification=centering}
+\caption{Parámetros S del LNA optimizado: (a) $S_{11}$, (b) $S_{21}$, \\ (c) $S_{12}$, (d) $S_{22}$.}
 \label{fig:parametros_s_opt}
 \end{figure}
 
