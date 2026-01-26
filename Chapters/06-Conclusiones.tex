@@ -1,4 +1,154 @@
 \chapter{Conclusiones}
 \label{chap:conclusiones}
 
-Contenido pendiente.
+\section{Resultados Generales}
+
+En este proyecto pudimos diseñar y simular las 4 etapas principales que integra un radar FMCW: Amplificador de potencia (PA), Oscilador controlado por tensión (VCO), Mezclador (Mixer) y Amplificador de bajo ruido (LNA). Se utilizó el Keysight ADS, un software avanzado el cual se especializa en proyectos de radiofrecuencia.
+
+Empezamos el trabajo sabiendo muy poco sobre el programa y terminamos dominando los conceptos básicos: construcción de esquemáticos, parametrización, optimización, barrido de parámetros (sweep), manejo de instrumento harmonic balance (para medir componentes espectrales y para medir un oscilador), análisis de condiciones de oscilación, medición y análisis de parámetros S, estabilidad, impedancia de entrada, cifra de ruido, punto de polarización, y manipulación de datos en la hoja de resultados.
+
+Sí bien no profundizamos en la simulación de líneas de transmisión y los componentes pasivos fueron idealizados, es un gran primer acercamiento del mundo del diseño de RF. Es clave aclarar que el diseño, la simulación y la confección del informe llevó gran cantidad de tiempo, alrededor de 150 horas-persona.
+
+Para elaborar el informe se utilizó el lenguaje \LaTeX{}, junto con su amplio ecosistema de programas. Se utilizó la plantilla \texttt{ipleiria-thesis} para darle forma inicial al informe, la cual está orientada para tesis doctorales. Se utilizó en la mayoría de los casos PGFplots para presentar los gráficos y en lo posible se desplegaron los esquemáticos del circuito como figuras vectoriales.
+
+\section{Resumen de Resultados por Etapa}
+
+A lo largo del presente trabajo se diseñaron y simularon las cuatro etapas fundamentales que componen el front-end de un radar FMCW operando a una frecuencia central de \qty{1}{\GHz}: el Oscilador Controlado por Tensión (VCO), el Amplificador de Potencia (PA), el Mezclador y el Amplificador de Bajo Ruido (LNA). En esta sección se presentan los resultados obtenidos para cada etapa, resumidos en las siguientes tablas.
+
+\subsection{Oscilador Controlado por Tensión (VCO)}
+
+El VCO, basado en la topología Clapp modificada en configuración colector común, cumple con los requerimientos establecidos para generar la señal chirp del radar FMCW. La Tabla \ref{tab:resultados_vco} resume las principales características obtenidas.
+
+\begin{table}[htbp]
+\centering
+\caption{Resultados del Oscilador Controlado por Tensión (VCO).}
+\label{tab:resultados_vco}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Parámetro} & \textbf{Valor} & \textbf{Unidad} \\
+\midrule
+Frecuencia central & 1,0 & GHz \\
+Rango de sintonía ($f_{min}$ -- $f_{max}$) & 975 -- 1025 & MHz \\
+Ancho de banda de barrido & 50 & MHz \\
+Tensión de control ($V_{tune}$) & 0 -- 1,1 & V \\
+Sensibilidad (zona lineal) & 67,89 & MHz/V \\
+Potencia de salida (fundamental) & $-0,6$ & dBm \\
+Relación 2\textsuperscript{da} armónica & $-12,85$ & dBc \\
+Relación 3\textsuperscript{ra} armónica & $-25,65$ & dBc \\
+Resistencia negativa @ 1 GHz & $-69,0$ & $\Omega$ \\
+Tiempo de arranque & $\approx 40$ & ns \\
+Amplitud pico a pico (estado estacionario) & 690 & mV \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Amplificador de Potencia (PA)}
+
+El Amplificador de Potencia, implementado con el transistor BFU590G en configuración de emisor común operando en Clase AB, fue optimizado para la frecuencia central de \qty{1}{\GHz}. La Tabla \ref{tab:resultados_pa} presenta los resultados obtenidos tras el proceso de optimización.
+
+\begin{table}[htbp]
+\centering
+\caption{Resultados del Amplificador de Potencia (PA).}
+\label{tab:resultados_pa}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Parámetro} & \textbf{Valor} & \textbf{Unidad} \\
+\midrule
+Frecuencia central & 1,0 & GHz \\
+Ancho de banda de operación & 975 -- 1025 & MHz \\
+Ganancia ($S_{21}$) @ 1 GHz & 11,6 & dB \\
+Adaptación de entrada ($S_{11}$) @ 1 GHz & $< -25$ & dB \\
+Adaptación de salida ($S_{22}$) @ 1 GHz & $< -30$ & dB \\
+$S_{11}$ en banda de paso & $< -10$ & dB \\
+Tensión de alimentación ($V_{CC}$) & 8 & V \\
+Tensión de polarización ($V_{bias}$) & 0,855 & V \\
+Clase de operación & AB & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Mezclador Simple Balanceado}
+
+El mezclador, implementado mediante un anillo de diodos Schottky BAT15-04W alimentado por un acoplador híbrido Rat-Race, permite la conversión de frecuencia necesaria para obtener la señal de frecuencia intermedia (IF). La Tabla \ref{tab:resultados_mixer} resume las características del acoplador y del mezclador.
+
+\begin{table}[htbp]
+\centering
+\caption{Resultados del Mezclador Simple Balanceado.}
+\label{tab:resultados_mixer}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Parámetro} & \textbf{Valor} & \textbf{Unidad} \\
+\midrule
+\multicolumn{3}{c}{\textit{Acoplador Rat-Race @ 1 GHz}} \\
+\midrule
+División de potencia ($S_{21}$, $S_{31}$) & $-3,0$ & dB \\
+Adaptación de entrada ($S_{11}$) & $< -40$ & dB \\
+Aislamiento ($S_{41}$) & $< -43$ & dB \\
+Impedancia característica del anillo ($Z_{ring}$) & 70,71 & $\Omega$ \\
+\midrule
+\multicolumn{3}{c}{\textit{Componentes del Rat-Race}} \\
+\midrule
+Inductor serie ($L_1$) & 11,25 & nH \\
+Capacitor derivación puertos 1 y 3 ($2C_1$) & 4,50 & pF \\
+Capacitor derivación puertos 2 y 4 ($C_3$) & 1,32 & pF \\
+Inductor derivación central ($L_2/2$) & 13,59 & nH \\
+Capacitor serie rama inferior ($C_2$) & 3,18 & pF \\
+\midrule
+\multicolumn{3}{c}{\textit{Mezclador}} \\
+\midrule
+Frecuencia de RF & 1,0 & GHz \\
+Frecuencia de IF (diferencia) & 1,0 & MHz \\
+Tipo de diodos & BAT15-04W & -- \\
+Configuración & Simple balanceado & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Amplificador de Bajo Ruido (LNA)}
+
+El LNA, basado en el transistor BFU550W según la nota de aplicación AN11426 de NXP, fue optimizado para mejorar la figura de ruido manteniendo una ganancia adecuada. La Tabla \ref{tab:resultados_lna} presenta los resultados obtenidos con los valores corregidos.
+
+\begin{table}[htbp]
+\centering
+\caption{Resultados del Amplificador de Bajo Ruido (LNA) -- Valores Corregidos.}
+\label{tab:resultados_lna}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Parámetro} & \textbf{Valor} & \textbf{Unidad} \\
+\midrule
+Frecuencia central & 1,0 & GHz \\
+Ganancia ($S_{21}$) @ 1 GHz & 10,8 & dB \\
+Figura de ruido (NF) @ 1 GHz & 1,33 & dB \\
+Figura de ruido mínima ($NF_{min}$) @ 1 GHz & 1,18 & dB \\
+Adaptación de entrada ($S_{11}$) @ 1 GHz & $-16,0$ & dB \\
+Adaptación de salida ($S_{22}$) @ 1 GHz & $-12,0$ & dB \\
+Aislamiento inverso ($S_{12}$) @ 1 GHz & $-23,8$ & dB \\
+Factor de estabilidad $\mu$ @ 1 GHz & 2,18 & -- \\
+Factor de estabilidad $\mu'$ @ 1 GHz & 2,74 & -- \\
+Punto de compresión de 1 dB ($P_{1dB}$) & 2 & dBm \\
+Corriente de colector ($I_C$) & 20 & mA \\
+Tensión colector-emisor ($V_{CE}$) & 3 & V \\
+\midrule
+\multicolumn{3}{c}{\textit{Componentes Optimizados}} \\
+\midrule
+Inductor de entrada ($L_1$) & 1,98 & nH \\
+Inductor de salida ($L_2$) & 4,40 & nH \\
+Capacitor de adaptación ($C_5$) & 58,0 & pF \\
+Capacitor de adaptación ($C_7$) & 12,6 & pF \\
+Impedancia de fuente óptima & 31,2 & $\Omega$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Mejoras Propuestas a Futuro}
+
+Se proponen las siguientes mejoras para una posible continuación del trabajo:
+
+\begin{itemize}
+    \item Inclusión de modelos reales de capacitores e inductores Murata.
+    \item Inclusión de líneas de transmisión.
+    \item Prueba de todas las etapas en conjunción.
+    \item Simulación de modelo real de antena, junto a todas las etapas. En lo posible poder simular el retraso y deformación de la onda en la antena receptora.
+    \item Procesamiento de la señal recibida, inferencia de distancia y velocidad.
+    \item Diseño de PCB, y verificación experimental.
+\end{itemize}

@@ -11,7 +11,6 @@ De esta expresión se desprende que una baja figura de ruido y una ganancia adec
 Para la implementación del LNA se tomó como referencia el circuito propuesto por NXP en la nota de aplicación AN11426, el cual utiliza el transistor bipolar de bajo ruido BFU550W. Dicho transistor está específicamente diseñado para aplicaciones de radiofrecuencia en el rango de cientos de MHz hasta algunos GHz, priorizando un bajo ruido intrínseco.
 El circuito de la AN11426 emplea una configuración de emisor común con polarización fija. Esta topología permite obtener una elevada ganancia de potencia, a costa de una mayor sensibilidad frente a variaciones de temperatura y dispersión de parámetros del transistor. No obstante, resulta adecuada para aplicaciones académicas y de laboratorio, donde dichas variaciones pueden ser controladas o compensadas.
 Según el fabricante, el circuito propuesto es capaz de cumplir con los siguientes requerimientos típicos:
-Tensión de alimentación: 
 \begin{itemize}
 \item \textbf{Corriente de colector}: $20\,\text{mA}$ (a temperatura ambiente)
 \item \textbf{Figura de ruido}: $NF<1.4\,\text{dB}$
@@ -106,7 +105,7 @@ En las simulaciones realizadas se obtuvo una ganancia máxima cercana a $15{,}5\
     width=0.95\textwidth,
     height=7cm,
     xlabel={Frecuencia [GHz]},
-    ylabel={dB(S(2,1))},
+    ylabel={$S_{21}$ [dB]},
     grid=both,
     grid style={line width=.1pt, draw=gray!30},
     major grid style={line width=.2pt, draw=gray!50},
@@ -262,13 +261,13 @@ Debido a la naturaleza no lineal de los transistores bipolares, la excitación c
 ]
 \addplot[blue, thick]
 table[x index=0, y index=1] {Datasets/5_LNA/power_AN11426.dat};
-\addlegendentry{$dB(Fundamental)$}
+\addlegendentry{Fundamental}
 \addplot[green, thick]
 table[x index=0, y index=2] {Datasets/5_LNA/power_AN11426.dat};
-\addlegendentry{$dB(Armonico_2)$}
+\addlegendentry{Armónico 2}
 \addplot[red, thick]
 table[x index=0, y index=3] {Datasets/5_LNA/power_AN11426.dat};
-\addlegendentry{$dB(Armonico_3)$}
+\addlegendentry{Armónico 3}
 \end{axis}
 \end{tikzpicture}
 \caption{Evolución de la potencia del segundo y tercer armónico en el circuito propuesto en AN11426}
@@ -307,7 +306,7 @@ Con estos nuevos valores podemos observar 2 cosas, se tuvo que reducir la induct
 
 
 \subsection{Figura de ruido de ruido}
-La figura de ruido del circuito anterior ya era buena pero se la decidió mejorar para que cumpla especificaciones similares a la de la nota de aplicación en la cual nos basamos, logrando una figura de ruido siempre menor a los $1.4dB$ la cual se puede seguir mejorando sacrificando la ganancia.
+La figura de ruido del circuito anterior ya era buena pero se la decidió mejorar para que cumpla especificaciones similares a la de la nota de aplicación en la cual nos basamos, logrando una figura de ruido siempre menor a los $1{,}4\,\text{dB}$ la cual se puede seguir mejorando sacrificando la ganancia.
 
 \begin{figure}[htbp]
 \centering
@@ -315,8 +314,8 @@ La figura de ruido del circuito anterior ya era buena pero se la decidió mejora
 \begin{axis}[
     width=0.95\textwidth,
     height=6cm,
-    xlabel={Potencia de entrada [dBm]},
-    ylabel={Potencia en la salida [dBm]},
+    xlabel={Frecuencia [GHz]},
+    ylabel={Noise Figure [dB]},
     grid=both,
     grid style={line width=.1pt, draw=gray!30},
     major grid style={line width=.2pt, draw=gray!50},
@@ -377,7 +376,7 @@ table[
 \end{figure}
 
 \subsection{Punto de compresión}
-Comparando este análisis con el anterior notaremos dos variaciones importantes, El punto de recomponen fue levemente corrido a a $2dBm$ lo cual nos permitirá conseguir una mayor potencia antes de que la señal se deforme considerablemente a la salida. Por otro lado podemos observar que la ganancia se redujo considerablemente pasando de una ganancia de aproximadamente $10dB$ a una de $8.5dB$ lo cual era esperable considerando que se redujo la figura de ruido.
+Comparando este análisis con el anterior notaremos dos variaciones importantes, El punto de compresión fue levemente corrido a $2\,\text{dBm}$ lo cual nos permitirá conseguir una mayor potencia antes de que la señal se deforme considerablemente a la salida. Por otro lado podemos observar que la ganancia se redujo considerablemente pasando de una ganancia de aproximadamente $10\,\text{dB}$ a una de $8{,}5\,\text{dB}$ lo cual era esperable considerando que se redujo la figura de ruido.
 
 \begin{figure}[htbp]
 \centering
@@ -396,13 +395,13 @@ Comparando este análisis con el anterior notaremos dos variaciones importantes,
 ]
 \addplot[blue, thick]
 table[x index=0, y index=1] {Datasets/5_LNA/correc_potencia.dat};
-\addlegendentry{$dB(Fundamental)$}
+\addlegendentry{Fundamental}
 \addplot[green, thick]
 table[x index=0, y index=2] {Datasets/5_LNA/correc_potencia.dat};
-\addlegendentry{$dB(Armonico_2)$}
+\addlegendentry{Armónico 2}
 \addplot[red, thick]
 table[x index=0, y index=3] {Datasets/5_LNA/correc_potencia.dat};
-\addlegendentry{$dB(Armonico_3)$}
+\addlegendentry{Armónico 3}
 \end{axis}
 \end{tikzpicture}
 \caption{$P_{in}vsArmonicos$}
@@ -436,7 +435,7 @@ table[x index=0, y index=4] {Datasets/5_LNA/correc_potencia.dat};
 
 
 \subsection{Parámetros S}
-Como se ve en los siguientes garfios se logro mejorar la ganancia en el punto de interés y se logro tener valores de $S_{11}$ y $S_{22}$ menores a $10dB$ en las frecuencias de interés.
+Como se ve en los siguientes gráficos se logró mejorar la ganancia en el punto de interés y se logró tener valores de $S_{11}$ y $S_{22}$ menores a $-10\,\text{dB}$ en las frecuencias de interés.
 
 \begin{figure}[htbp]
 \centering

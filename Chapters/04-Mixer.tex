@@ -15,18 +15,17 @@ En un radar FMCW, la frecuencia de la señal transmitida varía de manera contin
 
 De este modo, el mezclador cumple la función de traducir la información de distancia, originalmente codificada en una diferencia temporal, a una señal de baja frecuencia fácilmente procesable mediante técnicas digitales o analógicas.
 
-\subsection{Principio de Conversión de Frecuencia }
+\subsection{Principio de Conversión de Frecuencia}
 
 Considerando dos señales senoidales aplicadas al mezclador:
 \begin{itemize}
-    \item Señal de RF: \(fRF​\)
-    \item Señal del oscilador local: \(fLO​\)
-
+    \item Señal de RF: $v_{\text{RF}}(t) = A_{\text{RF}} \cos(2\pi f_{\text{RF}} t)$
+    \item Señal del oscilador local: $v_{\text{LO}}(t) = A_{\text{LO}} \cos(2\pi f_{\text{LO}} t)$
 \end{itemize}
 
 \noindent la salida del dispositivo no lineal contiene componentes en las frecuencias:
 \begin{equation}
-f_{IF} = \left| f_{RF} - f_{LO} \right| \quad \text{y} \quad f_{RF} + f_{LO}
+    f_{\text{IF}} = \left| f_{\text{RF}} - f_{\text{LO}} \right| \quad \text{y} \quad f_{\text{RF}} + f_{\text{LO}}
 \end{equation}
 
 En aplicaciones de radar FMCW, se selecciona la componente de diferencia mediante filtrado, descartando la componente de suma y otros productos no deseados. 
@@ -51,13 +50,11 @@ El uso del Rat-Race proporciona ventajas significativas:
 
 \subsubsection{Circuito del Rat-Race Splitter}
 
-Del paper "Design of Lumped Rat-Race Coupler in Multilayer LTCC" Presentado por Department of Electrical Engineering and Graduate Institute of Communication Engineering,
-National Taiwan University, Taipei, Taiwan, R.O.C.
-Obtenemos el circuito presente en la Figura \ref{fig:Rat-Race_Circuito}.
+A partir del artículo \textit{Design of Lumped Rat-Race Coupler in Multilayer LTCC} de la National Taiwan University~\cite{lumped_ratrace_ltcc}, se obtiene el circuito equivalente con elementos concentrados presentado en la Figura~\ref{fig:Rat-Race_Circuito}.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.7\textwidth]
+\includegraphics[width=0.5\textwidth]
 {Figures/4_Mixer/Rat-Race_Circuito.pdf}
 \caption{Circuito del Rat-Race Splitter.}
 \label{fig:Rat-Race_Circuito}
@@ -180,9 +177,9 @@ La \textbf{ganancia de conversión} del mezclador se define como la relación en
 
 En mezcladores pasivos basados en diodos Schottky, la ganancia de conversión suele ser negativa (pérdida de conversión), siendo su valor dependiente de la potencia del LO y del correcto diseño del circuito de acoplamiento.
 
-\subsection{Circuito de Referencia Utilizado }
+\subsection{Circuito de Referencia Utilizado}
 
-El diseño del mezclador se basa en la nota de aplicación \textbf{AN1808 de Infineon}, la cual describe la implementación de un mezclador balanceado mediante diodos Schottky en configuración de anillo, alimentado por un acoplador híbrido Rat-Race. Este circuito sirve como referencia para el análisis y la simulación realizada en este trabajo, adaptándose a las especificaciones del radar FMCW bajo estudio. 
+El diseño del mezclador se basa en la nota de aplicación \textbf{AN1808} de Infineon~\cite{infineon_an1808}, la cual describe la implementación de un mezclador balanceado mediante diodos Schottky en configuración de anillo, alimentado por un acoplador híbrido Rat-Race. Este circuito sirve como referencia para el análisis y la simulación realizada en este trabajo, adaptándose a las especificaciones del radar FMCW bajo estudio.
 Está compuesto por los siguientes bloques:
 
 \begin{figure}[htbp]
@@ -224,9 +221,10 @@ En las Figuras \ref{fig:vco_core_schematic} y \ref{fig:vco_core_symbol} respecti
 \caption{Esquemático del núcleo del Mixer.}
 \label{fig:mixer_core_schematic}
 \end{figure}
+
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.8\textwidth]{Figures/4_Mixer/mixer_core_symbol.pdf}
+\includegraphics[width=0.4\textwidth]{Figures/4_Mixer/mixer_core_symbol.pdf}
 \caption{Símbolo del núcleo del Mixer.}
 \label{fig:mixer_core_symbol}
 \end{figure}
@@ -243,9 +241,10 @@ La implementación del acoplador híbrido como una etapa separada permite ademá
 \caption{Esquemático del Rat-Race.}
 \label{fig:rat_race_schematic}
 \end{figure}
+
  \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.8\textwidth]{Figures/4_Mixer/rat_race_symbol.pdf}
+\includegraphics[width=0.4\textwidth]{Figures/4_Mixer/rat_race_symbol.pdf}
 \caption{Símbolo del Rat-Race.}
 \label{fig:rat_race_symbol}
 \end{figure}
